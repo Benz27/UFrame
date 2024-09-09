@@ -1,0 +1,161 @@
+@import url('https://fonts.googleapis.com/css2?family=Birthstone&family=Poppins:ital,wght@0,400;0,500;0,600;1,600;1,800&display=swap');
+
+*{/*lahat ng may text, href, body background*/
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+a, a:hover, a:focus /* yung mga may href */
+{
+    text-decoration: none;
+    outline: none;
+}
+li /* yung explore, login, sign up, offer background*/
+{
+    list-style: none;
+    display: inline-block;
+    margin-top: 12px;
+}
+.header /* pinaka taas na row*/
+{
+    background-color: rgb(223, 199, 180);
+    box-shadow: 0px 5px 10px rgba(91, 91, 91, 0.1);
+}
+.header_logo /* logo */
+{
+    padding: 50px;
+    text-align: center;
+}
+.header_logo a /* yung word mismo na creatives */
+{
+    display: inline-block;
+    color: #000;
+    font-size: 50px;
+    font-weight: 900;
+    font-family: 'Birthstone', cursive;
+    letter-spacing: .5px;
+    
+}
+.header_logo a:hover /* effects kapag hinover yung logo */
+{
+    color: black;
+}
+.header_logo a span /*effects nung nasa loob ng span which is yung 'the'*/
+{
+    color: saddlebrown;
+    font-size: 50px;
+    font-weight: 700;
+    font-family: 'Birthstone', cursive;
+}
+.header_menu /* yung after ng logo na column */
+{
+    padding: 20px 0 27px;
+    text-align: center;
+}
+.header_menu ul li /* each effecys ng li explore, login, sign up at offer */
+{
+    position: relative;
+    display: inline-block;
+    margin-right: 40px;
+}
+.header_menu ul li a /* each href at yung explore, login, sign up at offer*/
+{
+    color: black;
+    font-size: 17px;
+    font-weight: 500;
+    display: block;
+    padding: 2px 0;
+    position: relative;
+}
+.header_menu ul li a:after /* underline ng mga salita */
+{
+    position: absolute;
+    content: '';
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 2px;
+    background-color: saddlebrown;
+    transition: all 0.5s;
+    transform: scale(0);
+}
+.header_menu ul li:hover a:after /* effects pag hinover yung underline */
+{
+    transform: scale(1);
+}
+.header_menu ul li.active a:after /* effects nung nakahighlight na underline or pag nasa specific page */
+{
+    transform: scale(1);
+}
+.header_menu ul li:last-child /* huling element, which is yung offer*/
+{
+    margin-right: 0;
+}
+.header_right
+{
+    text-align: center;
+    padding: 30px 0 27px;
+}
+.header_right .header_right_auth
+{
+    display: inline-block;
+    margin-left: 70px;
+}
+.header_right .header_right_auth a
+{
+    font-size: 17px;
+    font-weight: 500;
+    color: rgb(100, 100, 100);
+    position: relative;
+    margin-right: 13px;
+}
+.header_right .header_right_auth a:hover
+{
+    color: black;
+}
+.banner 
+{
+    background: #a770ef;
+    background: -webkit-linear-gradient(to right, #a770ef, #cf8bf3, #fdb99b);
+    background: linear-gradient(to right, #a770ef, #cf8bf3, #fdb99b);
+}
+.form 
+{
+    margin-top: -80px;
+    position: relative;
+}
+.form .fa-search 
+{
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    color: #9ca3af;
+}
+.form span 
+{
+    position: absolute;
+    right: 20px;
+    top: 8px;
+    border-left: 1px solid #d1d5db;
+}
+
+.left-pan 
+{
+    padding-left: 7px;
+}
+
+.left-pan i {
+    padding-left: 10px;
+}
+
+.form-input {
+    height: 35px;
+    text-indent: 33px;
+    border-radius: 10px;
+}
+
+.form-input:focus {
+    box-shadow: none;
+    border: none;
+}

@@ -1,0 +1,936 @@
+<?php
+session_start();
+
+include("php/conn.php");
+include("php/read.php");
+
+
+$user_data=check_login($alink);
+
+
+?>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>RBF Admin</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+<style>
+    .vertical-center {
+        min-height: 100%; 
+        min-height: 100vh; 
+        align-items: center;
+    }
+</style>
+</head>
+
+<body id="page-top">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+            <!-- Sidebar - Brand -->
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+                <!-- <div class="sidebar-brand-icon rotate-n-15">
+                    <i class="fas fa-laugh-wink"></i>
+                </div> -->
+                <div class="sidebar-brand-text mx-3">RBF Admin</div>
+            </a>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider my-0">
+
+            <!-- Nav Item - Dashboard -->
+            <li class="nav-item">
+                <a class="nav-link" href="index.html">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Dashboard</span></a>
+            </li>
+
+         
+            <hr class="sidebar-divider">
+
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                Interface
+            </div>
+
+            <!-- Nav Item - Pages Collapse Menu -->
+
+<!-- 
+            <div class="sidebar-heading">
+                Addons
+            </div> -->
+
+  
+            <!-- <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
+                    aria-expanded="true" aria-controls="collapsePages">
+                    <i class="fas fa-fw fa-folder"></i>
+                    <span>Pages</span>
+                </a>
+                <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Login Screens:</h6>
+                        <a class="collapse-item" href="login.html">Login</a>
+                        <a class="collapse-item" href="register.html">Register</a>
+                        <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
+                        <div class="collapse-divider"></div>
+                        <h6 class="collapse-header">Other Pages:</h6>
+                        <a class="collapse-item" href="404.html">404 Page</a>
+                        <a class="collapse-item" href="blank.html">Blank Page</a>
+                    </div>
+                </div>
+            </li>
+
+     
+            <li class="nav-item">
+                <a class="nav-link" href="charts.html">
+                    <i class="fas fa-fw fa-chart-area"></i>
+                    <span>Charts</span></a>
+            </li>
+
+    
+             -->
+            <!-- <li class="nav-item">
+                <a class="nav-link" href="orders.html">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Orders</span></a>
+            </li> -->
+
+            <!-- <hr class="sidebar-divider d-none d-md-block"> -->
+
+ 
+            <div class="text-center d-none d-md-inline">
+                <button class="rounded-circle border-0" id="sidebarToggle"></button>
+            </div>
+
+        </ul>
+        <!-- End of Sidebar -->
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Topbar -->
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+                    <!-- Sidebar Toggle (Topbar) -->
+                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                        <i class="fa fa-bars"></i>
+                    </button>
+
+                    <!-- Topbar Search -->
+                    <!-- <form
+                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                        <div class="input-group">
+                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
+                                aria-label="Search" aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="button">
+                                    <i class="fas fa-search fa-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form> -->
+
+                    <!-- Topbar Navbar -->
+                    <ul class="navbar-nav ml-auto">
+
+                        <!-- Nav Item - Search Dropdown (Visible Only XS) -->
+                        <li class="nav-item dropdown no-arrow d-sm-none">
+                            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-search fa-fw"></i>
+                            </a>
+                            <!-- Dropdown - Messages -->
+                            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
+                                aria-labelledby="searchDropdown">
+                                <form class="form-inline mr-auto w-100 navbar-search">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control bg-light border-0 small"
+                                            placeholder="Search for..." aria-label="Search"
+                                            aria-describedby="basic-addon2">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-primary" type="button">
+                                                <i class="fas fa-search fa-sm"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </li>
+
+                        <!-- Nav Item - Alerts -->
+                       
+
+                        <div class="topbar-divider d-none d-sm-block"></div>
+
+                        <!-- Nav Item - User Information -->
+                        <li class="nav-item dropdown no-arrow">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo $nav_fname;?> <?php echo $nav_lname;?></span>
+                                <i class="fas fa-fw fa-user"></i>
+                            </a>
+                            <!-- Dropdown - User Information -->
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                aria-labelledby="userDropdown">
+                                <a class="dropdown-item" href="profile.html">
+                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Profile
+                                </a>
+                                <a class="dropdown-item" href="security.html">
+                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Security
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a style="cursor: pointer;" class="dropdown-item" data-toggle="modal" data-target="#logoutModal">
+                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Logout
+                                </a>
+                            </div>
+                        </li>
+
+                    </ul>
+
+                </nav>
+                <!-- End of Topbar -->
+
+
+
+
+
+
+
+
+
+
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid px-4">
+                    <form id="form" method="post">
+                    <div class="row gx-4">
+                        <div class="col-lg-8">
+                            <div class="card mb-4">
+                                
+                                <div class="card-header"><span style="color: red;">*</span> Item Name</div>
+                                <div class="card-body"><input class="form-control" id="name" type="text" placeholder="Enter the item name..." required/></div>
+                            </div>
+                            <div class="card card-header-actions mb-4 mb-lg-2">
+                                <div class="card-header">
+                                    Item Media
+                                    <i class="text-muted" data-feather="info" data-bs-toggle="tooltip" data-bs-placement="left" title=""></i>
+                                </div>
+                                <div class="card-header">
+                                    <button id="btnc" type="button" onclick="adm(0,this.id);ifile.click();" class="btn-outline-dark">Add Media</button>
+                                    <input type="file" id = "ifile" hidden>
+                                </div>
+                                <div class="row no-gutters" id="ime">
+                                
+                                
+                                
+                                
+                                </div>
+                          
+                            </div>
+
+                            
+
+                            <!-- <div class="card card-header-actions mb-4">
+                                <div class="card-header">
+
+                                    Category
+                                    <i class="text-muted" data-feather="info" data-bs-toggle="tooltip" data-bs-placement="left" title=""></i>
+                                </div>
+                                <div class="card-body"><input class="lh-base form-control" type="text"  id="catg" placeholder="Enter the item category..."></input></div>
+                            </div> -->
+
+
+
+
+                            <!-- <div class="card card-header-actions mb-4">
+                                <div class="card-header">
+                                    <span style="color: red;">*</span>
+                                    Item Details
+                                    <i class="text-muted" data-feather="info" data-bs-toggle="tooltip" data-bs-placement="left" title=""></i>
+                                </div>
+                                <div class="card-body">
+
+
+                                    <div class="container">
+                                        <div class="row">
+    
+
+
+
+                            
+
+                                          <div class="col-sm">
+                                            <label for="bed"><span style="color: red;">*</span>Category:</label>
+                                            <select name="bed" id="catg" style="width: 65%;">
+                                            <option value="Bed Set">Bed Set</option>
+                                              <option value="Bed Frame">Bed Frame</option>
+                                              <option value="Bed Sheet">Bed Sheet</option>
+                                              <option value="Mattress">Mattress</option>
+                                              <option value="Pillow">Pillow</option>
+                                              <option value="Pillow Sheets">Pillow Sheets</option>
+                                              <option value="Blanket">Blanket</option>
+                                              <option value="Rug">Rug</option>
+                                            </select>
+
+                                          </div>  
+                                        </div>
+                                        <hr>
+
+                                        
+
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                 <label for=""><span style="color: red;">*</span>Price:</label>
+                                                <input class="lh-base form-control" type="text" id="price" placeholder="Enter the item price..."></input>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <label for=""><span style="color: red;">*</span>Stock:</label>
+                                                <input class="lh-base form-control" type="text" id="stock" value="1" placeholder="Enter the item stock..."></input>
+                                            </div>
+                                          </div>
+
+
+
+
+
+
+                                          
+                                      </div>
+
+                                     
+                                </div>
+
+
+                            </div> -->
+                            
+                            <div class="card card-header-actions mb-4">
+                                <div class="card-header">
+                                    <span style="color: red;">*</span>
+                                    Item Details
+                                    <i class="fa fa-plus-circle" style="cursor: pointer;" onclick="add_det()"></i>
+                                    <!-- <i class="fa fa-paperclip" style="cursor: pointer;" onclick="log()"></i>
+                                    <i class="fa fa-save" style="cursor: pointer;" onclick="append_obj()"></i> -->
+                                    <i class="text-muted" data-feather="info" data-bs-toggle="tooltip" data-bs-placement="left" title=""></i>
+                                </div>
+
+                   
+                                    <div class="container" id="det">
+
+                                                      
+                                    </div>
+                 
+                            
+                            </div>
+
+                            <div class="card card-header-actions mb-4 mb-lg-0">
+                                <div class="card-header">
+                                    Description
+                                    <i class="text-muted" data-feather="info" data-bs-toggle="tooltip" data-bs-placement="left" title=""></i>
+                                </div>
+                                <div class="card-body"><textarea class="lh-base form-control"   id="summ" type="text" placeholder="Enter the item description... (e.g Good quality steel!, Color, or materials)" rows="6"></textarea></div>
+
+                            </div>
+
+                            <div class="card card-header-actions mb-4 mb-lg-0">
+                                <div class="card-header">
+                                    Notes
+                                    <i class="text-muted" data-feather="info" data-bs-toggle="tooltip" data-bs-placement="left" title=""></i>
+                                </div>
+                                <div class="card-body"><textarea class="lh-base form-control"   id="note" type="text" placeholder="Enter the notes for this item...." rows="6"></textarea></div>
+
+                            </div>
+                           
+                            <br>
+ 
+                        </div>
+                        
+                        <div class="col-lg-4">
+                            <div class="card card-header-actions">
+                                <div class="card-header">
+                                    Showcase
+                                    <i class="text-muted" data-feather="info" data-bs-toggle="tooltip" data-bs-placement="left" title="After submitting, your post will be published once it is approved by a moderator."></i>
+                                </div>
+                                <div class="card-body">
+
+                                    <div class="d-grid"><button class="fw-500 btn btn-primary" onclick="frmsub();" type="button">Save Item</button></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                </div>
+
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; RBF Admin 2022</span>
+                    </div>
+                </div>
+            </footer>
+            <!-- End of Footer -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">x</span>
+                    </button>
+                </div>
+                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-primary" href="login.html">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="myModal" class="modal vertical-center">
+
+        <div class="modal-dialog" role="document">
+            <div class="modal-content border border-5 border-primary">
+
+              <div class="modal-body align-self-center">
+                <p class="fas fa-check" style="font-size: 100px;"></p>
+              </div>
+              <div class="modal-footer align-self-center" style="color:aqua;">Item has been added successfully.</div>
+            </div>
+          </div>
+        
+      </div>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="js/sb-admin-2.min.js"></script>
+    <script>
+
+var modal = document.getElementById("myModal");
+
+modal.onclick = function() {
+  modal.style.display = "none";
+
+}
+
+window.onclick = function(event) {
+    modal.style.display = "none";
+
+}
+
+
+var usertype;
+var imgbase64;
+var fnm;
+var ss=0;
+var bt=0;
+var bid;
+var mlist=[];
+var b64arr=[];
+var fnmarr=[];
+
+var url_string = window.location.href;
+        var url = new URL(url_string);
+
+const ifile=document.getElementById("ifile");
+        const artwork=document.getElementById("artwork");
+        const img=document.querySelector('#my_image');
+        const txt=document.getElementById("txtsf");
+     
+        const img3=document.querySelector('#my_image4');
+        const img2=document.querySelector('#my_image3');
+        
+        // btncl.addEventListener('click', function(event){
+        //   img.setAttribute('src',"../images/can.png");
+        //   txt.value="";
+        //   imgbase64="";
+        //   ifile.value="";
+        // });
+function remv(x){
+    key=mlist.indexOf(x);
+    a=[];
+    b=mlist.slice(0,key);
+    c=mlist.slice(key+1);
+    mlist=a.concat(b,c);
+
+    a=[];
+    b=b64arr.slice(0,key);
+    c=b64arr.slice(key+1);
+    b64arr=a.concat(b,c);
+
+    a=[];
+    b=fnmarr.slice(0,key);
+    c=fnmarr.slice(key+1);
+    fnmarr=a.concat(b,c);
+
+    // console.log(mlist.length+"-"+b64arr.length+"-"+fnmarr.length);
+    document.getElementById(x).remove();
+}
+
+function adm(x,y){
+     bt=x;
+    bid=y;
+}
+        ifile.addEventListener('change', function(event){
+
+          const uploadedFile = document.querySelector('#ifile').files[0];
+		      toBase64(uploadedFile)
+		      .then(res => {
+             imgbase64=res;
+             savepay(res,fnm,bt,bid);
+             ifile.value="";
+	      	})
+		      .catch(err => {
+            imgbase64=err;
+            console.log(err);
+            ifile.value="";
+	    	  })
+
+        });
+
+      const toBase64 = file => new Promise((resolve, reject) => {
+	    const reader = new FileReader();
+      reader.addEventListener('load', function(){
+
+ 
+              fnm=ifile.value.match(/[\/\\]([\w\d\s\.\-\(\)]+)$/)[1];
+           
+            });
+
+	    reader.readAsDataURL(file);
+	    reader.onload = () => resolve(reader.result);
+	    reader.onerror = error => reject(error);
+	      });
+
+
+
+        var prd=false;
+  function numonly(e) {
+    e = (e) ? e : window.event;
+    var chr = (e.which) ? e.which : e.keyCode;
+    if (document.getElementById("price").value.indexOf('.') > -1){
+      prd=true;
+    }else{
+      prd=false
+    }
+    if (chr!=46&&(chr > 31 && (chr < 48 || chr > 57))) {
+     return false;
+
+    }else{
+      if (prd && chr == 46)
+          {
+              return false;
+          }
+      
+      return true;
+    }
+
+
+  
+  }
+
+  function tc(){
+    if (prd){
+
+    document.getElementById("price").value = Number(document.getElementById("price").value).toFixed(2);
+    }
+
+  }
+
+                                   
+
+var mcount=0;
+
+
+  function savepay(b64,fnm,xy,id){
+    if(xy==1){
+
+        document.getElementById(id+"img").setAttribute("src", b64);
+        document.getElementById(id+"inp").value=fnm
+        b64arr[mlist.indexOf(id)]=b64;
+        fnmarr[mlist.indexOf(id)]=fnm;
+
+    }
+    else{
+
+mcount+=1;
+
+const element = document.getElementById("ime");
+
+const tr = document.createElement("div");
+tr.setAttribute("id",mcount);
+tr.setAttribute("class","col-md-4");
+tr.setAttribute("style","padding: 10px; margin-bottom: 1%; background-image: linear-gradient(to bottom, rgb(199, 199, 199), rgb(199, 199, 199) 100%);");
+
+const td = document.createElement("img");
+td.setAttribute("id",mcount+"img");
+td.setAttribute("class", "img-fluid");
+td.setAttribute("src", b64);
+td.setAttribute("alt",fnm);
+tr.appendChild(td);
+
+const td2 = document.createElement("input");
+td2.setAttribute("id",mcount+"inp");
+td2.setAttribute("readonly","true");
+td2.setAttribute("class", "lh-base form-control");
+td2.setAttribute("type","text");
+td2.setAttribute("style","margin-top: 10px;");
+
+td2.setAttribute("value",fnm);
+tr.appendChild(td2);
+
+const tr2 = document.createElement("div");
+tr2.setAttribute("style", "margin-top: 10px;");
+tr2.setAttribute("class", "d-flex justify-content-center");
+
+const td1 = document.createElement("button");
+td1.setAttribute("id", mcount+"rmbt");
+td1.setAttribute("onclick", "remv("+mcount+");");
+td1.setAttribute("style", "margin-right: 1%;");
+td1.setAttribute("type", "button");
+td1.setAttribute("class", "btn-dark");
+const td1txt = document.createTextNode("Remove");
+td1.appendChild(td1txt);
+tr2.appendChild(td1);
+
+
+const td8 = document.createElement("button");
+td8.setAttribute("id", mcount+"brbt");
+td8.setAttribute("onclick", "adm(1,"+mcount+");ifile.click();");
+td8.setAttribute("type", "button");
+td8.setAttribute("class", "btn-dark");
+const td8txt = document.createTextNode("Browse File");
+td8.appendChild(td8txt);
+tr2.appendChild(td8);
+
+tr.appendChild(tr2);
+
+element.appendChild(tr);
+mlist.push(mcount);
+b64arr.push(b64);
+fnmarr.push(fnm);
+
+}
+
+}
+
+var det=[]; //single dimension
+var detcnt=0; //id continous value
+var detlst=[]; //double dimension
+var detlstcnt=[]; //single dimension ids continous value
+
+var detid=[]; //single dimension
+var dettxt=[]; //double dimension
+
+function add_det(){
+	det.push(detcnt);
+	detlst.push([]);
+	detlstcnt.push(0);
+	const detcount=detcnt;
+	detcnt+=1;
+
+
+	const element = document.getElementById("det");
+
+	const div = document.createElement("div");
+	div.setAttribute("class","row mb-3 mt-2");
+	div.setAttribute("id",detcount+"det");
+
+    const div2 = document.createElement("div");
+	div2.setAttribute("class","col-sm-6");
+
+
+    
+    const label = document.createElement("label");
+    const span = document.createElement("span");  
+	span.setAttribute("style","color: red;");
+    const spantxt = document.createTextNode("*");
+    const labeltxt = document.createTextNode("Title:");
+    span.appendChild(spantxt);
+    label.appendChild(span);
+    label.appendChild(labeltxt);
+    div2.appendChild(label);
+
+    const div3 = document.createElement("div");
+	div3.setAttribute("class","col-sm-12");
+
+
+    const i = document.createElement("i");
+    i.setAttribute("class","fa fa-trash");
+    i.setAttribute("style","cursor: pointer;");
+    i.setAttribute("onclick",'del_det('+detcount+')');
+    i.setAttribute("id",detcount+"detbtndel");
+
+	const inp = document.createElement("input");
+	inp.setAttribute("class","lh-base col-10");
+	inp.setAttribute("id",detcount+"detinp");
+	inp.setAttribute("type","text");
+	inp.setAttribute("value","");
+	inp.setAttribute("placeholder","Enter the item title...");
+
+    const i2 = document.createElement("i");
+    i2.setAttribute("class","fa fa-plus-circle");
+    i2.setAttribute("style","cursor: pointer;margin-left:5px;");
+    i2.setAttribute("onclick",'add_det_lst('+detcount+')');
+    i2.setAttribute("id",detcount+"detbtnaddlst");
+
+    div3.appendChild(i);
+	div3.appendChild(inp);
+    // div3.appendChild(i2);
+
+    div2.appendChild(div3);
+    div.appendChild(div2);
+
+    const div4 = document.createElement("div");
+	div4.setAttribute("class","col-sm-6");
+
+    const label2 = document.createElement("label");
+    const labeltxt2 = document.createTextNode("Add Description");
+    label2.appendChild(labeltxt2);
+
+    const div5 = document.createElement("div");
+	div5.setAttribute("id",detcount+"detlst");
+
+    div4.appendChild(label2);
+    div4.appendChild(i2);
+    div4.appendChild(div5);
+    div.appendChild(div4);
+    
+    element.appendChild(div);
+
+}
+
+function add_det_lst(id){
+
+	const index = det.indexOf(id);
+	var detcount=detlstcnt[index];
+	const tmpdet=detlst[index];
+	tmpdet.push(detcount);
+
+
+
+	const element = document.getElementById(id+"detlst");
+
+    const div = document.createElement("div");
+    div.setAttribute("class","col-sm-12");
+
+	const i = document.createElement("i");
+	i.setAttribute("id",id+'detlstdelbtn'+detcount);
+    i.setAttribute("class","fa fa-trash");
+    i.setAttribute("style","cursor: pointer;");
+	i.setAttribute("onclick",'del_det_lst('+id+','+detcount+')');
+
+	const inp = document.createElement("input");
+	inp.setAttribute("class","lh-base col-10");
+	inp.setAttribute("id",id+"detno"+detcount);
+	inp.setAttribute("type","text");
+	inp.setAttribute("value","");
+	inp.setAttribute("placeholder","Enter the description");
+
+    div.appendChild(i);
+    div.appendChild(inp);
+	detcount+=1;
+	detlstcnt[index]=detcount;
+	detlst[index]=tmpdet;	
+    element.appendChild(div);
+	
+}
+
+function del_det(id){
+	const index = det.indexOf(id);
+	det.splice(index, 1);
+	detlst.splice(index, 1);
+	detlstcnt.splice(index, 1);
+	document.getElementById(id+"det").remove();
+
+}
+
+function del_det_lst(id,n){
+	const index = det.indexOf(id);
+	const tmpdetlst=detlst[index];
+	const index2 = tmpdetlst.indexOf(n);
+	tmpdetlst.splice(index2, 1);
+	detlst[index]=tmpdetlst;
+	document.getElementById(id+"detno"+n).remove();
+	document.getElementById(id+"detlstdelbtn"+n).remove();
+	
+}
+var details = {};
+function append_obj(){
+
+	for(x=0;x<det.length;x++){
+
+		const arr2=detlst[x];
+		detid.push(document.getElementById(det[x]+"detinp").value);
+		const conttxt=[];
+		for(y=0;y<arr2.length;y++){
+            conttxt.push(document.getElementById(det[x]+"detno"+arr2[y]).value);
+		}
+		dettxt.push(conttxt);
+
+	}
+
+	for(x=0;x<detid.length;x++){
+	const obj2 = {};
+
+	for(y=0;y<dettxt[x].length;y++){
+
+		obj2[y] = dettxt[x][y];
+
+	}
+
+	details[detid[x]] = obj2;
+	}
+    detid=[];
+    dettxt=[];
+  
+}
+
+function log(){
+	console.log("det",det);
+	console.log("detcnt",detcnt);
+	console.log("detlst",detlst);
+	console.log("detlstcnt",detlstcnt);
+	console.log("------------");
+	console.log("detid",detid);
+	console.log("dettxt",dettxt);
+
+}
+
+
+function frmsub(){
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        clear();
+        modal.style.display = "flex";
+
+      }
+    };
+        var formdata = new FormData();
+append_obj();
+formdata.append("name",document.getElementById("name").value);
+formdata.append("catg",document.getElementById("catg").value);
+formdata.append("price",document.getElementById("price").value);
+formdata.append("summ",document.getElementById("summ").value);
+formdata.append("note",document.getElementById("note").value);
+formdata.append("stock",document.getElementById("stock").value);
+
+formdata.append("details_json",JSON.stringify(details))
+formdata.append("mlist_json",JSON.stringify(mlist));
+formdata.append("b64arr_json",JSON.stringify(b64arr));
+formdata.append("fnmarr_json",JSON.stringify(fnmarr));
+
+xhttp.open("POST", "../php/showc.php", true);
+xhttp.send(formdata);
+}
+// var today = new Date();
+
+//   var hours = today.getHours();
+//   var minutes = today.getMinutes();
+//   var ampm = hours >= 12 ? 'pm' : 'am';
+//   hours = hours % 12;
+//   hours = hours ? hours : 12; // the hour '0' should be '12'
+//   minutes = minutes < 10 ? '0'+minutes : minutes;
+//   var strTime = hours + ':' + minutes + '' + ampm;
+
+// var today2 = new Date();
+// var date2 = today2.getDate()+'/'+(today2.getMonth()+1)+'/'+today2.getFullYear();
+
+function clear(){
+    document.getElementById("name").value="";
+    document.getElementById("price").value="";
+    document.getElementById("note").value="";
+    document.getElementById("stock").value="";
+    document.getElementById("catg").value="Bed Sheet";
+    document.getElementById("summ").value="";
+    document.getElementById("det").innerHTML="";
+    imgbase64="";
+ fnm="";
+ ss=0;
+ bt=0;
+ bid=0;
+ mlist=[];
+ b64arr=[];
+ fnmarr=[];
+
+ det=[];
+ detcnt=0;
+ detlst=[];
+ detlstcnt=[];
+ detid=[];
+ dettxt=[];
+ details = {};
+
+//  document.getElementById("rada1").Checked=true;
+//  document.getElementById("rada2").Checked=false;
+//  document.getElementById("rada3").Checked=false;
+
+//  document.getElementById("radb1").Checked=true;
+//  document.getElementById("radb2").Checked=false;
+//  document.getElementById("radb3").Checked=false;
+
+//  document.getElementById("ot1").value="";
+
+//  document.getElementById("ot2").value="";
+ ifile.value="";
+    mcount=0;
+    document.getElementById("stock").value
+    document.getElementById("ime").innerHTML="";
+}
+
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,961 @@
+<?php
+session_start();
+
+include("./php/conn.php"); 
+include("./php/read.php");
+
+$user_data=check_login($alink);
+
+?>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>RBF Admin</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+</head>
+
+<body id="page-top">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+            <!-- Sidebar - Brand -->
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+                <!-- <div class="sidebar-brand-icon rotate-n-15">
+                    <i class="fas fa-laugh-wink"></i>
+                </div> -->
+                <div class="sidebar-brand-text mx-3">RBF Admin</div>
+            </a>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider my-0">
+
+            <!-- Nav Item - Dashboard -->
+            <li class="nav-item">
+                <a class="nav-link" href="index.html">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Dashboard</span></a>
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                Interface
+            </div>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+                    aria-expanded="true" aria-controls="collapseTwo">
+                    <i class="fas fa-fw fa-user"></i>
+                    <span>Account</span>
+                </a>
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <!-- <h6 class="collapse-header">Custom Components:</h6> -->
+                        <a class="collapse-item" href="profile.html">Profile</a>
+                        <a class="collapse-item" style="cursor: pointer;" data-toggle="modal"
+                            data-target="#logoutModal">Log-Out</a>
+                    </div>
+                </div>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="sitedetails.html" aria-expanded="true"
+                    aria-controls="collapsesitedet">
+                    <i class="fas fa-fw fa-store"></i>
+
+                    <span>Shop Details</span>
+                </a>
+
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="order_list.html" aria-expanded="true"
+                    aria-controls="collapseOrders">
+                    <i class="fas fa-fw fa-list-alt"></i>
+
+                    <span>Orders</span>
+                </a>
+
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseInventory"
+                    aria-expanded="true" aria-controls="collapseInventory">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Products</span>
+                </a>
+                <div id="collapseInventory" class="collapse" aria-labelledby="headingInventory"
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <!-- <a class="collapse-item" href="productlist.html">Product list</a> -->
+                        <a class="collapse-item dropdown-toggle" role="button" id="addproduct" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Add Product
+                        </a>
+                        <!-- Dropdown - User Information -->
+                        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                            aria-labelledby="addproduct">
+                            <a class="dropdown-item" href="addproduct.html">
+                                Single product
+                            </a>
+                            <a class="dropdown-item" href="addproduct_v.html">
+                                Product with variants
+                            </a>
+                        </div>
+
+                        <a class="collapse-item" href="stocks.html">Products</a>
+                        <a class="collapse-item" href="categories.html">Categories</a>
+                    </div>
+                </div>
+            </li>
+
+
+            <li class="nav-item active">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAnalytics"
+                    aria-expanded="true" aria-controls="collapseAnalytics">
+                    <i class="fas fa-fw fa-chart-line"></i>
+                    <span>Reports</span>
+                </a>
+                <div id="collapseAnalytics" class="collapse show" aria-labelledby="headingAnalytics"
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <!-- <h6 class="collapse-header">Custom Components:</h6> -->
+                        <a class="collapse-item" href="orders_sales.html">Order Sales</a>
+                        <a class="collapse-item" href="sales.html">Sales by Date</a>
+                        <a class="collapse-item" href="product_sales.html">Product Sales</a>
+                        <a class="collapse-item active" href="category_sales.html">Product Category Sales</a>
+                        <a class="collapse-item" href="shipment.html">Shipments</a>
+                    </div>
+                </div>
+            </li>
+
+
+
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="customers.html" aria-expanded="true"
+                    aria-controls="collapseCustomer">
+                    <i class="fas fa-fw fa-user"></i>
+
+                    <span>Customers</span>
+                </a>
+
+            </li>
+
+
+            <li class="nav-item">
+                <a class="nav-link" href="transportapps.html" aria-expanded="true" aria-controls="collapseTransport">
+                    <i class="fas fa-fw fa-truck"></i>
+
+                    <span>Delivery Apps</span>
+                </a>
+
+            </li>
+
+            <?php
+            if($priv==10){
+                echo'<li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAcc"
+                        aria-expanded="true" aria-controls="collapseAcc">
+                        <i class="fas fa-fw fa-users"></i>
+                        <span>Manage Accounts</span>
+                    </a>
+                    <div id="collapseAcc" class="collapse" aria-labelledby="headingAcc"
+                        data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <a class="collapse-item" href="acclist.html">Admin accounts</a>
+                            <a class="collapse-item" href="create.html">Add account</a>
+                            <!-- <a class="collapse-item" href="utilities-other.html">Pickups</a> -->
+                        </div>
+                    </div>
+                </li>';
+            }
+
+            ?>
+
+
+            <hr class="sidebar-divider">
+            <div class="text-center d-none d-md-inline">
+                <button class="rounded-circle border-0" id="sidebarToggle"></button>
+            </div>
+
+
+        </ul>
+        <!-- End of Sidebar -->
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Topbar -->
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+                    <!-- Sidebar Toggle (Topbar) -->
+                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                        <i class="fa fa-bars"></i>
+                    </button>
+
+                    <!-- Topbar Search -->
+                    <!-- <form
+                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                        <div class="input-group">
+                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
+                                aria-label="Search" aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="button">
+                                    <i class="fas fa-search fa-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form> -->
+
+                    <!-- Topbar Navbar -->
+                    <ul class="navbar-nav ml-auto">
+
+                        <!-- Nav Item - Search Dropdown (Visible Only XS) -->
+                        <li class="nav-item dropdown no-arrow d-sm-none">
+                            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-search fa-fw"></i>
+                            </a>
+                            <!-- Dropdown - Messages -->
+                            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
+                                aria-labelledby="searchDropdown">
+                                <form class="form-inline mr-auto w-100 navbar-search">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control bg-light border-0 small"
+                                            placeholder="Search for..." aria-label="Search"
+                                            aria-describedby="basic-addon2">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-primary" type="button">
+                                                <i class="fas fa-search fa-sm"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </li>
+
+
+                        <div class="topbar-divider d-none d-sm-block"></div>
+
+                        <!-- Nav Item - User Information -->
+                        <li class="nav-item dropdown no-arrow">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">
+                                    <?php echo $nav_fname;?>
+                                    <?php echo $nav_lname;?>
+                                </span>
+                                <i class="fas fa-fw fa-user"></i>
+                            </a>
+                            <!-- Dropdown - User Information -->
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                aria-labelledby="userDropdown">
+                                <a class="dropdown-item" href="profile.html">
+                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Profile
+                                </a>
+                                <a class="dropdown-item" href="security.html">
+                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Security
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a style="cursor: pointer;" class="dropdown-item" data-toggle="modal"
+                                    data-target="#logoutModal">
+                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Logout
+                                </a>
+                            </div>
+                        </li>
+
+                    </ul>
+
+                </nav>
+                <!-- End of Topbar -->
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+
+
+                    <!-- <div class="col-xl-12 col-lg-12">
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Bar Chart</h6>
+                                    <div class="dropdown no-arrow">
+                                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                                            aria-labelledby="dropdownMenuLink">
+                                            <div class="dropdown-header">Dropdown Header:</div>
+                                            <a class="dropdown-item" href="#">Action</a>
+                                            <a class="dropdown-item" href="#">Another action</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="#">Something else here</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="chart-bar">
+                                        <canvas id="myBarChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div> -->
+
+
+
+                    <div class="row">
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-info shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                                Total Revenue From Date</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><span
+                                                    id="totrev"></span></div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-coins fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-info shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                                Total Quantity From Date</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><span
+                                                    id="totqnt"></span></div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-list-alt fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-3 col-md-6 mb-4" id="topseldiv">
+                            <div class="card border-left-info shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                                Most Sold Product From Date</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><span
+                                                    id="topsel"></span></div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-trophy fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Sales Report</h6>
+                        </div>
+
+                        <div class="card shadow mb-4">
+
+                            <div class="card-header py-3">
+
+                                <div class="row gx-3 mb-3 col-xl-12">
+                                    <div class="col-md-2">
+                                        <label for="dtechse">Date by:</label>
+                                        <select name="dtechse" id="dtechse" class="col-md-12 form-control"
+                                            onchange="set_srtdte(this.value)">
+                                            <option value="5">Day</option>
+                                            <option value="1">Week</option>
+                                            <option value="2">Month</option>
+                                            <option value="3">Year</option>
+                                            <option value="4">Date Range</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="row gx-3 mb-3 col-xl-6" id="srtdte">
+
+                                    </div>
+                                    <div class="col-md-2" id="entdte">
+
+                                    </div>
+
+                                </div>
+
+                                <div class="row gx-3 mb-3 col-xl-12"></div>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                        <thead>
+                                            <tr>
+                                                <th>Category</th>
+                                                <th>Total</th>
+                                                <th>Quantity</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody id="tbody">
+
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- End -->
+
+                </div>
+                <!-- /.container-fluid -->
+
+            </div>
+            <!-- End of Main Content -->
+            <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; RBF Admin 2022</span>
+                    </div>
+                </div>
+            </footer>
+            <!-- End of Footer -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">x</span>
+                    </button>
+                </div>
+                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-primary" href="./php/logout.php">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="addmodal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add Shipping Fee</h5>
+
+                    <span aria-hidden="true" data-dismiss="modal" style="cursor: pointer;">&times;</span>
+
+                </div>
+                <div id="ld">
+                    <div class="modal-body" id="mdbody">
+                        <div class="col-md-12">
+                            <span style="color: red;">*</span>
+                            <label class="small mb-1" for="s_fee">Fee</label>
+                            <input class="form-control" id="s_fee" type="text" placeholder="Enter the shipping fee"
+                                value="" />
+                            <small id="emp1" style="color: red;" hidden>This field cannot be empty!</small>
+                        </div>
+                        <div class="mb-3">
+                            <label class="small mb-1" for="s_details">Shipping Details</label>
+                            <textarea class="form-control" id="s_details" cols="30" rows="10"
+                                placeholder="Enter the shipping details"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer" id="mdfooter">
+                        <button type="button" class="btn btn-primary" onclick="assign();">Assign</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                            onclick="clear_mod()">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="js/sb-admin-2.min.js"></script>
+
+    <script src="vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+    <!-- <script src="vendor/chart.js/Chart.min.js"></script>
+    <script src="js/demo/chart-bar-demo.js"></script> -->
+
+    <script>
+
+
+        var start_dte;
+        var end_dte;
+        set_srtdte(5);
+
+
+        function set_dates() {
+            const start = document.getElementById("startdate");
+            const end = document.getElementById("enddate");
+            if (check_date()) {
+
+                start_dte = start.value;
+                end_dte = end.value;
+
+                get_sales();
+            } else {
+                start.value = start_dte;
+                end.value = end_dte;
+                alert("End date must be later than start date!");
+            }
+        }
+
+        function set_year() {
+            const start = document.getElementById("year").value + "-01-01";
+            const end = document.getElementById("year").value + "-12-31";
+
+            start_dte = start;
+            end_dte = end;
+
+
+            get_sales();
+        }
+        function set_month() {
+
+            const year = document.getElementById("year").value;
+            const month = document.getElementById("month").value;
+            const firstDay = new Date(Number(year), Number(month), 1);
+            const lastDay = new Date(Number(year), Number(month) + 1, 0);
+
+            const start = formatDate(firstDay);
+            const end = formatDate(lastDay);
+
+            start_dte = start;
+            end_dte = end;
+            get_sales();
+
+        }
+        function set_week() {
+            const week = document.getElementById("week").value.split("|");
+            const start = week[0];
+            const end = week[1];
+
+            start_dte = start;
+            end_dte = end;
+            console.log(start_dte, end_dte);
+            get_sales();
+
+
+        }
+        function set_day() {
+            const start = document.getElementById("startdate");
+            const end = document.getElementById("enddate");
+
+            start_dte = start.value;
+            end_dte = end.value;
+            get_sales();
+
+
+        }
+
+
+
+        function get_sales() {
+
+
+
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    const arr = JSON.parse(this.responseText);
+                    document.getElementById("totrev").innerHTML = "₱" + arr[1];
+                    document.getElementById("totqnt").innerHTML = arr[2];
+
+                    if (arr[3] != 0) {
+                        document.getElementById("topsel").innerHTML = arr[3];
+                        document.getElementById("topseldiv").hidden = false;
+                    } else {
+                        document.getElementById("topseldiv").hidden = true;
+                    }
+                    $('#dataTable').DataTable().clear().draw();
+                    if (arr[0] != "") {
+                        const tr = $(arr[0]);
+                        for (x = 0; x < tr.length; x++) {
+                            $('#dataTable').DataTable().row.add(tr[x]).draw();
+                        }
+                    }
+                    $('#dataTable').DataTable().order([[2, "desc"]]).draw();
+
+                };
+            }
+
+
+            var formdata = new FormData();
+            formdata.append("start", start_dte);
+            formdata.append("end", end_dte);
+            xhttp.open("POST", "./php/call_functions.php?x=get_catg_sales", true);
+            xhttp.send(formdata);
+
+        }
+
+
+
+        function check_date() {
+            var start = document.getElementById("startdate").value;
+            var end = document.getElementById("enddate").value;
+            var start_arr = start.split("-");
+            var end_arr = end.split("-");
+            var start_num = (Number(start_arr[0]) * 10000) + (Number(start_arr[1]) * 100) + Number(start_arr[2]);
+            var end_num = (Number(end_arr[0]) * 10000) + (Number(end_arr[1]) * 100) + Number(end_arr[2]);
+            if (start_num > end_num) {
+                return false;
+            }
+            return true;
+        }
+
+        function get_dates() {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+
+                if (this.readyState == 4 && this.status == 200) {
+
+                    if (this.responseText != "") {
+                        const start = document.getElementById("startdate");
+                        const end = document.getElementById("enddate");
+                        const date_time = this.responseText;
+                        const date_time_array = date_time.split(",");
+                        const date1 = date_time_array[0].split(" ");
+                        const date2 = date_time_array[1].split(" ");
+                        start.value = date1[0];
+                        end.value = date2[0];
+                        start_dte = date1[0];
+                        end_dte = date2[0];
+
+                        const start_arr = date1[0].split("-");
+                        const end_arr = date2[0].split("-");
+                        const start_month = start_arr[1];
+                        const end_month = end_arr[1];
+
+                        const start_year = start_arr[0];
+                        const end_year = end_arr[0];
+
+
+                        get_sales();
+                    }
+                }
+            }
+            xhttp.open("GET", "./php/call_functions.php?x=get_dates", true);
+            xhttp.send();
+        }
+
+
+        function get_srts(id) {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+
+                if (this.readyState == 4 && this.status == 200) {
+
+                    if (this.responseText != "") {
+
+                        const date_time = this.responseText;
+                        const date_time_array = date_time.split(",");
+                        const date1 = date_time_array[0].split(" ");
+                        const date2 = date_time_array[1].split(" ");
+                        const start_arr = date1[0].split("-");
+                        const end_arr = date2[0].split("-");
+                        const start_month = start_arr[1];
+                        const end_month = end_arr[1];
+                        const start_year = start_arr[0];
+                        const end_year = end_arr[0];
+
+                        const month_list = ['January',
+                            'February',
+                            'March',
+                            'April',
+                            'May',
+                            'June',
+                            'July',
+                            'August',
+                            'September',
+                            'October',
+                            'November',
+                            'December'
+                        ];
+
+
+                        if (id < 4) {
+                            for (x = start_year; x <= end_year; x++) {
+                                var option = document.createElement("option");
+
+                                option.text = x;
+                                option.value = x;
+                                document.getElementById("year").add(option);
+
+                                set_year();
+                            }
+                        }
+                        if (id < 3) {
+                            for (x = 0; x < month_list.length; x++) {
+                                var option = document.createElement("option");
+
+                                option.text = month_list[x];
+                                option.value = x;
+                                document.getElementById("month").add(option);
+                            }
+                            document.getElementById("month").selectedIndex = end_month - 1;
+                            set_month();
+
+                        }
+
+                        if (id < 2) {
+                            getMonthsWeeksDate(document.getElementById("month").value, document.getElementById("year").value);
+                            set_week();
+                        }
+                        if (id == 5) {
+                            const tday = new Date();
+                            const start = document.getElementById("startdate");
+                            const end = document.getElementById("enddate");
+
+                            start.value = date1[0];
+                            end.value = formatDate(tday);
+                            set_day();
+                        }
+
+                    }
+                }
+            }
+            xhttp.open("GET", "./php/call_functions.php?x=get_dates", true);
+            xhttp.send();
+        }
+
+        function switch_year(id) {
+
+            if (id == 0) {
+                document.getElementById("month").selectedIndex = 0;
+            } else if (id == 1) {
+                document.getElementById("month").selectedIndex = 0;
+                getMonthsWeeksDate(document.getElementById("month").value, document.getElementById("year").value);
+            }
+
+        }
+
+        function switch_month() {
+            document.getElementById("week").innerHTML = "";
+            getMonthsWeeksDate(document.getElementById("month").value, document.getElementById("year").value);
+
+        }
+
+
+
+
+
+        function formatDate(date) {
+            var d = new Date(date),
+                month = '' + (d.getMonth() + 1),
+                day = '' + d.getDate(),
+                year = d.getFullYear();
+
+            if (month.length < 2)
+                month = '0' + month;
+            if (day.length < 2)
+                day = '0' + day;
+
+            return [year, month, day].join('-');
+        }
+
+
+        function getMonthsWeeksDate(month, year) {
+            const d = new Date();
+
+
+            var firstDay = new Date(Number(year), Number(month), 1);
+            var lastDay = new Date(Number(year), Number(month) + 1, 0);
+
+            for (y = Number(firstDay.getDate()), z = Number(lastDay.getDate()); y <= z; y++) {
+
+                curdate = new Date(year, month, y);
+                x = curdate.getDay();
+
+                dte = String(curdate).split(" ");
+
+
+                if (x == 0 || y == Number(firstDay.getDate())) {
+                    start = dte[0] + ", " + dte[1] + " " + dte[2] + ", " + dte[3];
+                    startdte = curdate;
+                }
+
+
+                if (x == 6 || y == z) {
+                    end = dte[0] + ", " + dte[1] + " " + dte[2] + ", " + dte[3];
+                    enddte = curdate;
+
+                    var option = document.createElement("option");
+
+                    option.text = start + " - " + end;
+                    option.value = formatDate(startdte) + "|" + formatDate(enddte);
+                    document.getElementById("week").add(option);
+                }
+
+
+            }
+        }
+
+
+        function set_srtdte(id) {
+            if (id == 5) {
+                str = `                 <div class="col-md-6">
+                                            <label class="small mb-1" for="location">Start date</label>
+                                            <input type="text" class="form-control" name="start" id="startdate" readonly>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label class="small mb-1" for="group">End date</label>
+                                            <input type="text" class="form-control" name="end" id="enddate" readonly>
+                                        </div>`;
+
+                btn = ``;
+
+
+                document.getElementById("srtdte").innerHTML = str;
+                document.getElementById("entdte").innerHTML = btn;
+                get_srts(5);
+            } else if (id == 1) {
+                str = `                 <div class="col-md-4">
+                                        <label for="year">Year:</label>
+                                        <select name="year" id="year" class="col-md-12 form-control" onchange="switch_year(1)">
+                                        </select>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                        <label for="month">Month:</label>
+                                        <select name="month" id="month" class="col-md-12 form-control" onchange="switch_month()">
+                                        </select>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                        <label for="week">Week:</label>
+                                        <select name="week" id="week" class="col-md-12 form-control">
+                                        </select>
+                                        </div>`;
+                btn = `                   <button class="btn btn-primary mt-4" id="btn" type="button"
+                                        onclick="set_week();">Enter Date</button>`;
+                document.getElementById("srtdte").innerHTML = str;
+                document.getElementById("entdte").innerHTML = btn;
+
+                get_srts(1);
+            } else if (id == 2) {
+                str = `                 <div class="col-md-4">
+                                        <label for="year">Year:</label>
+                                        <select name="year" id="year" class="col-md-12 form-control" onchange="switch_year(0)">
+                                        </select>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                        <label for="month">Month:</label>
+                                        <select name="month" id="month" class="col-md-12 form-control" onchange="">
+                                        </select>
+                                        </div>`;
+                btn = `                   <button class="btn btn-primary mt-4" id="btn" type="button"
+                                        onclick="set_month();">Enter Date</button>`;
+                document.getElementById("srtdte").innerHTML = str;
+                document.getElementById("entdte").innerHTML = btn;
+                get_srts(2);
+            } else if (id == 3) {
+                str = `                 <div class="col-md-4">
+                                        <label for="year">Year:</label>
+                                        <select name="year" id="year" class="col-md-12 form-control" onchange="">
+                                        </select>
+                                        </div>`;
+                btn = `                   <button class="btn btn-primary mt-4" id="btn" type="button"
+                                        onclick="set_year();">Enter Date</button>`;
+                document.getElementById("srtdte").innerHTML = str;
+                document.getElementById("entdte").innerHTML = btn;
+                get_srts(3);
+            } else if (id == 4) {
+                str = `                 <div class="col-md-6">
+                                            <label class="small mb-1" for="location">Start date</label>
+                                            <input type="date" class="form-control" name="start" id="startdate">
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label class="small mb-1" for="group">End date</label>
+                                            <input type="date" class="form-control" name="end" id="enddate">
+                                        </div>`;
+
+                btn = `                   <button class="btn btn-primary mt-4" id="btn" type="button"
+                                        onclick="set_dates();">Enter Date</button>`;
+
+
+                document.getElementById("srtdte").innerHTML = str;
+                document.getElementById("entdte").innerHTML = btn;
+                get_dates();
+            }
+
+        }
+
+
+
+    </script>
+</body>
+
+</html>

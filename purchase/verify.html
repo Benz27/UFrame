@@ -1,0 +1,317 @@
+<?php
+session_start();
+
+include("../php/conn.php");
+include("../php/read.php");
+
+$user_data=check_login($link);
+$vcode;
+$email="";
+
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/css/bootstrap.min.css"/>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"></script> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet"href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+    <style>
+.card {
+    width: 40%;
+    padding: 10px;
+    border-radius: 20px;
+    background: rgb(248, 221, 199);
+    border: none;
+    height: 450px;
+    position: relative
+}
+
+.container {
+    height: 70vh
+}
+
+body {
+    background: rgb(255, 249, 245);
+}
+
+.mobile-text {
+    color: #000000b8;
+    font-size: 15px
+}
+
+.form-control {
+    margin-right: 12px
+}
+
+.form-control:focus {
+    color: #495057;
+    background-color: #fff;
+    border-color: saddlebrown;
+    outline: 0;
+    box-shadow: none
+}
+
+.cursor {
+    cursor: pointer
+}
+input { 
+    text-align: center; 
+}
+    </style>
+</head>
+<body>
+<main>
+
+   
+    <div class="p-3 d-flex justify-content-center align-middle">
+        <div class="header_logo">
+            <a href="../" class="animate__animated animate__bounce animate__infinite" style="text-decoration: none;"><img class="logo" src="../images/logo.png" alt="logo"  width="200" height="80" style="float: left;"/></a>
+        </div>
+    </div>
+ 
+                <div class="d-flex justify-content-center align-items-center container" id="main">
+                    
+                    <div class="card py-5 px-3">
+                        
+                        <div class="p-3 d-flex justify-content-center"><span style="padding: 20px 30px 40px 30px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 400;">We first need to confirm your email address with existing purchase records on our website.</span></div>
+                        <div id="snd">
+                        <div class="p-3 d-flex justify-content-center">
+                            <button class="" type="button"  id="ver" style="width: 50%;background-color: rgb(231, 118, 31);" onclick="srchem();ver();">Send Verification Code</button>
+                        </div>
+                         <div class="text-center"><span class="d-block mobile-text" id="st">Sending email to</span><span class="font-weight-bold" style="color: #333333;" id="vemail"><?php echo $email;?></span></div>
+                         <div class="d-flex flex-row"><input type="text" class="form-control" id="inp2" autofocus=""></div>
+                        <div class="text-center mt-5"><span class="font-weight-bold cursor"><a href="../"  style="color: saddlebrown;text-decoration: none;">Go Back</a></span></div>
+
+                    </div>
+                    </div>
+                </div>
+
+<div id="sub" hidden>
+    <div class="p-3 d-flex justify-content-center">
+        <button class="" type="button"  id="ver" style="width: 50%;background-color: rgb(231, 118, 31);" onclick="srchem();ver();">Send Verification Code</button>
+    </div>
+     <div class="text-center"><span class="d-block mobile-text" id="st">Sending email to</span><span class="font-weight-bold" style="color: #333333;" id="vemail"><?php echo $email;?></span></div>
+     <div class="d-flex flex-row"><input type="text" class="form-control" id="inp2" autofocus=""></div>
+    <div class="text-center mt-5"><span class="font-weight-bold cursor"><a href="../"  style="color: saddlebrown;text-decoration: none;">Go Back</a></span></div>
+
+</div>
+
+                
+                </div>
+            </div>
+ 
+            <div id="spin" hidden>
+                    <div class="d-flex justify-content-center">
+                        <div class="spinner-border" role="status">
+                          <span class="sr-only">Loading...</span>
+                        </div>
+                      </div>
+                </div>
+  <div id="err" hidden>
+                <div class="text-center mb-5"><span class="d-block mobile-text">Something went wrong.</span><span class="font-weight-bold cursor" style="color: saddlebrown;" onclick="countdown.start();ver();">Resend</span></div>
+  <div id="verified" hidden>
+                <div class="text-center mb-5"><span class="d-block mobile-text">Your account is already verified.</span><span class="font-weight-bold cursor"><a href="profshowc.html" style="color: saddlebrown;text-decoration: none;">Go back</a></span></div>
+            
+            
+            </div>
+                <div id="vin" hidden>
+                    
+                    <div class="p-3 d-flex justify-content-center">
+                        <button class="" type="button"  id="vers" style="width:  50%;background-color: rgb(221, 113, 36);" onclick="chk();">Confirm</button>
+                    </div>
+                    <div class="d-flex flex-row"><input type="text" class="form-control" id="inp1" autofocus=""></div>
+                    <div class="text-center mt-3"><span class="font-weight-bold cursor"><a href="profabout.html" style="color: saddlebrown;text-decoration: none;">Go back</a></span></div>
+                    <div class="p-3 d-flex justify-content-center"><span style="padding: 0px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400;"  id="rever">We have sent a verification code to your email. The code will expire after 15 minutes or upon closing this tab.</span></div>
+                    <div class="p-3 d-flex justify-content-center"><span style="padding: 0px; color: #242424; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 15px; font-weight: 400;"  id="rever">NOTE: the email containing the code we sent may have been listed as a spam email. Kindly check your spam folder in case you did not recieve the email.</span></div>
+
+                    <div class="text-center mt-5"><span class="d-block mobile-text">Didn't receive the code?</span><span class="font-weight-bold cursor" style="color: saddlebrown;;" onclick="countdown.start();ver();">Resend</span></div>
+                </div>
+            </main>
+    <script>
+    var em= "";  
+        function srchem(){
+          
+    var xhttp = new XMLHttpRequest();
+var emm;
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+
+        y=Number(this.responseText);
+        if(y==0){
+            wr();
+            document.getElementById("snd").innerHTML=document.getElementById("sub").innerHTML;
+            document.getElementById("st").innerHTML="No records of this email has been found.";
+            document.getElementById("inp2").value=emm;
+            document.getElementById("inp2").style.borderColor="red";
+        }else{
+            em=emm;
+            countdown.start();
+        }
+        console.log(this.responseText);
+      }
+    }
+    
+    if(document.getElementById("inp2").value!=""){
+        emm=document.getElementById("inp2").value;
+        xhttp.open("GET", "../php/verify.php?e="+document.getElementById("inp2").value, true);
+        xhttp.send();
+
+    }else{
+        document.getElementById("st").innerHTML="Please input an email";
+    }
+    
+
+}
+
+
+        var tcode=0;
+  
+function innh(booll){
+ if(booll){
+           document.getElementById("snd").innerHTML=document.getElementById("vin").innerHTML;
+
+        }else{
+           document.getElementById("snd").innerHTML=document.getElementById("err").innerHTML;
+
+        }
+
+}
+function sndcode(){
+
+
+var xhttp = new XMLHttpRequest();
+    
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+          var y=0;
+        y=Number(this.responseText);
+        if(y==1){
+            window.location.href="./";
+        }
+        console.log(this.responseText);
+      }
+      }
+      xhttp.open("GET", "../php/verify.php?v="+1+"&e="+em, true);
+    xhttp.send();
+}
+        function ver(){
+   
+document.getElementById("snd").innerHTML=document.getElementById("spin").innerHTML;
+
+        }
+        function chk(){
+            var vrcode=document.getElementById("inp1").value;
+            if(Number(vrcode)==Number(code)){
+                document.getElementById("inp1").style.borderColor="none";
+                sndcode();
+            }else{
+                wr();
+            }
+
+        }
+        function wr(){
+            document.getElementById("inp1").style.borderColor="red";
+
+        }
+        function Counter(options) {
+    var timer;
+    var instance = this;
+    var seconds = options.seconds || 10;
+    var onUpdateStatus = options.onUpdateStatus || function() {};
+    var onCounterEnd = options.onCounterEnd || function() {};
+    var onCounterStart = options.onCounterStart || function() {};
+    var code=0; 
+    
+    function decrementCounter() {
+        onUpdateStatus(seconds);
+        if (seconds === 0) {
+            stopCounter();
+            onCounterEnd();
+            return;
+        }
+        seconds--;
+    };
+
+    function startCounter() {
+        onCounterStart();
+        clearInterval(timer);
+        timer = 0;
+        decrementCounter();
+        timer = setInterval(decrementCounter, 1000);
+    };
+
+    function stopCounter() {
+        clearInterval(timer);
+    };
+
+    return {
+        start : function() {
+            startCounter();
+        },
+        stop : function() {
+            stopCounter();
+        }
+    }
+};
+
+var countdown = new Counter({
+
+    seconds: 9000,
+
+    onCounterStart: function () { 
+    
+      code=Math.floor((Math.random() * 7000) + 2000);
+        console.log(code);
+        // alert(code);
+        tcode=code; 
+  var xhttp = new XMLHttpRequest();
+    
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        var y=0;
+        y=Number(this.responseText);
+        if(y==1){
+        innh(true);
+        }else{
+        innh(false);
+        }
+        console.log(this.responseText);
+      }
+    }
+      var formdata = new FormData();
+formdata.append("message","Your code is verification code is "+code+". Enter this code to confirm your email.\r\n ---------------------------------------------------------------------------------------------\r\n\r\n© 2022 UFrame");
+formdata.append("email",em);
+formdata.append("name","UFrame");
+formdata.append("subject","Your code is "+code+".");
+formdata.append("sender","UFrame2@gmail.com");
+
+  xhttp.open("POST", "../php/contactform/submit.php", true);
+  xhttp.send(formdata);
+
+
+
+
+
+    },
+
+
+    onUpdateStatus: function(second) {
+        
+    },
+
+
+    onCounterEnd: function() {
+       var code=0;
+    }
+});
+
+
+    </script>
+</body>
+</html>

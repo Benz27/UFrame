@@ -1,0 +1,191 @@
+<?php
+session_start();
+include("../php/conn.php");
+include("../php/read.php");
+$user_data=check_login($link);
+$u_id=0;
+if(isset($_SESSION['user_id'])){   
+
+  $u_id=$_SESSION['user_id'];
+  
+}
+$ident=0;
+$artist="";
+$stock=0;
+
+  $sql = "SELECT * FROM artwork where user_id <> $u_id";
+
+
+
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uframe furnitures - Shop Online</title>
+
+    <!-- main css -->
+    <link rel="stylesheet" href="../css/home.css">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-uWxY/CJNBR+1zjPWmfnSnVxwRheevXITnMqoEIeG1LJrdI0GlVs/9cVSyPYXdcSF" crossorigin="anonymous">
+
+    <!-- link for animate-->
+    <link rel="stylesheet"href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+    <!-- link for font awesome -->
+    <script src="https://kit.fontawesome.com/9334436048.js" crossorigin="anonymous"></script>
+
+</head>
+<style>
+#md.sticky{
+	position: -webkit-sticky;
+	position: sticky;
+	float: left;
+	left: 50%;
+	top: 50%;
+	z-index: 5;
+	height: 500px;
+	width: 500px;
+	display: block;
+	border-radius: 30px;
+	background-color: #dfc7b4;
+	padding-bottom: 30px;
+	padding-left: 30px;
+	padding-right: 30px;
+	padding-top: 30px;
+}
+</style>
+<body>
+    <!-- header -->
+    <style>a{text-decoration: none;}</style>
+    <header class="header">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-2">
+                    <div class="header_logo">
+                        <a href="explore.html" class="animate__animated animate__bounce animate__infinite">hjjrk</a>
+                    </div>
+                </div>
+                <div class="col-lg-7">
+                    <nav>
+                        <div class="header_menu" hidden>
+                            <ul>
+                                <li class="active"><a href="explore.html">Explore</a></li>
+                                <li><a href="artists.html">Request Art Commissions</a></li>                            </ul>
+                        </div>
+                    </nav>
+                </div>
+                <div class="col-lg-3">
+                    <div class="header_right">
+                        <div class="header_right_auth">
+                          <a id="profc" href="profcart.html">Cart</a>
+                            <a id="prof" href="profabout.html">Profile</a>
+
+                            <a id="log" href="../php/logout.php">Log Out</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row height d-flex justify-content-center align-items-center">
+                    <div class="col-md-6">
+                        <div class="form"> <i class="fa fa-search" style="cursor: pointer;"></i> <input type="text" class="form-control form-input" id="srch" placeholder="Search anything..."> </div>
+                    </div>
+                  </div>
+            </div>
+        </div>
+    </header>
+
+
+    <div class="container-fluid">
+    <div class="px-lg-5">
+    <div class="row py-5">
+
+ <?php          
+ if($result = mysqli_query($link, $sql)){ 
+
+    if(mysqli_num_rows($result) > 0){ 
+      while($row = mysqli_fetch_array($result)){  
+   
+        $sqlf="SELECT username FROM user where user_id=$row[user_id]"; 
+        $resultf=mysqli_query($link, $sqlf);  
+        if($resultf && mysqli_num_rows($resultf) > 0){ 
+  
+          $user_data=mysqli_fetch_assoc($resultf);
+  
+          $artist=$user_data['username'];
+  
+  
+  
+        }
+        echo'<div class="col-xl-3 col-lg-4 col-md-6 mb-4">';
+        echo'<div class="bg-white rounded shadow-sm">';
+    
+        echo '<a href="art.html?art='. $row['art_id'] .'"><img src="'. $row['artwork'] .'" onclick="s()" name="art-pic" alt="" class="img-fluid card-img-top" onContextMenu="return false;"></a>';
+    
+        echo '<div class="p-4">';
+        echo '<h5 onclick="s()" name="art-n">'. $row['artname'] .'</h5>';
+      
+    
+        echo '</div>';
+        $sql4 = "SELECT tname FROM artwork where art_id = $row[art_id]";
+        $result4=mysqli_query($link, $sql4);  
+        if($result4 && mysqli_num_rows($result4) > 0){ 
+    
+          $us=mysqli_fetch_assoc($result4);
+          $stock=$us['tname'];
+          if($stock>0){
+    
+            echo '<p onclick="s()" name="artist-n"style="float:right">On Stock</p>';
+          }else{
+            echo '<p onclick="s()" name="artist-n"style="float:right">Out of Stock</p>';
+          }
+        }
+        
+       
+    
+        echo '<p onclick="s()" name="price-n" style="color:saddlebrown;">₱'. $row['price'] .'</p>';
+    
+        echo '</div>';
+        echo '</div>';
+        }
+        mysqli_free_result($result);
+        } 
+        } else{
+        echo "ERROR: Could not able to execute $sql. " . mysqli_error($link);
+        }
+
+?>     
+</div>
+
+
+
+
+
+
+              <div class="py-5 text-right">
+				<a href="#" id="rt" class="btn btn-dark px-5 py-3 text-uppercase" hidden>Return to top</a></div>
+            </div>
+        </div>
+
+        
+    </div>
+	<div id="md">
+		<div class="md-pic"></div>
+		<div class="md-art-name"></div>
+		<div class="md-artist-name"></div>
+		<div class="md-art-details"></div>
+		<div class="md-art-price"></div>
+		<button class="md-art-purchase"></button>
+		<button class="md-close"></button>
+	</div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-kQtW33rZJAHjgefvhyyzcGF3C5TFyBQBA13V1RKPf4uH+bwyzQxZ6CmMZHmNBEfJ" crossorigin="anonymous"></script>
+
+
+<script src="../js/feed.js"></script>
+</body>
+</html>
+

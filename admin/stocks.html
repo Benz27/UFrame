@@ -1,0 +1,900 @@
+<?php
+session_start();
+
+include("./php/conn.php"); 
+include("./php/read.php");
+
+$user_data=check_login($alink);
+?>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>RBF Admin</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+</head>
+
+<body id="page-top">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+            <!-- Sidebar - Brand -->
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+                <!-- <div class="sidebar-brand-icon rotate-n-15">
+                    <i class="fas fa-laugh-wink"></i>
+                </div> -->
+                <div class="sidebar-brand-text mx-3">RBF Admin</div>
+            </a>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider my-0">
+
+            <!-- Nav Item - Dashboard -->
+            <li class="nav-item">
+                <a class="nav-link" href="index.html">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Dashboard</span></a>
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                Interface
+            </div>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true"
+                    aria-controls="collapseTwo">
+                    <i class="fas fa-fw fa-user"></i>
+                    <span>Account</span>
+                </a>
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <!-- <h6 class="collapse-header">Custom Components:</h6> -->
+                        <a class="collapse-item" href="profile.html">Profile</a>
+                        <a class="collapse-item" style="cursor: pointer;" data-toggle="modal" data-target="#logoutModal">Log-Out</a>
+                    </div>
+                </div>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="sitedetails.html"
+                    aria-expanded="true" aria-controls="collapsesitedet">
+                    <i class="fas fa-fw fa-store"></i>
+
+                    <span>Shop Details</span>
+                </a>
+ 
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="order_list.html"
+                    aria-expanded="true" aria-controls="collapseOrders">
+                    <i class="fas fa-fw fa-list-alt"></i>
+
+                    <span>Orders</span>
+                </a>
+ 
+            </li>
+            
+            <li class="nav-item active">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseInventory"
+                    aria-expanded="true" aria-controls="collapseInventory">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Products</span>
+                </a>
+                <div id="collapseInventory" class="collapse show" aria-labelledby="headingInventory"
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <!-- <a class="collapse-item" href="productlist.html">Product list</a> -->
+                            <a class="collapse-item dropdown-toggle" role="button" id="addproduct" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Add Product
+                            </a>
+                            <!-- Dropdown - User Information -->
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                aria-labelledby="addproduct">
+                                <a class="dropdown-item" href="addproduct.html">
+                                    Single product
+                                </a>
+                                <a class="dropdown-item" href="addproduct_v.html">
+                                    Product with variants
+                                </a>
+                            </div>
+
+                        <a class="collapse-item active" href="stocks.html">Products</a>
+                        <a class="collapse-item" href="categories.html">Categories</a>
+                    </div>
+                </div>
+            </li>
+
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAnalytics" aria-expanded="true"
+                    aria-controls="collapseAnalytics">
+                    <i class="fas fa-fw fa-chart-line"></i>
+                    <span>Reports</span>
+                </a>
+                <div id="collapseAnalytics" class="collapse" aria-labelledby="headingAnalytics"
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="orders_sales.html">Order Sales</a>
+                        <a class="collapse-item" href="sales.html">Sales by Date</a>
+                        <a class="collapse-item" href="product_sales.html">Product Sales</a>
+                        <a class="collapse-item" href="category_sales.html">Product Category Sales</a>
+                        <a class="collapse-item" href="shipment.html">Shipments</a>
+                    </div>
+                </div>
+            </li>
+
+
+
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="customers.html"
+                    aria-expanded="true" aria-controls="collapseCustomer">
+                    <i class="fas fa-fw fa-user"></i>
+
+                    <span>Customers</span>
+                </a>
+ 
+            </li>
+
+
+            <li class="nav-item">
+                <a class="nav-link" href="transportapps.html" 
+                    aria-expanded="true" aria-controls="collapseTransport">
+                    <i class="fas fa-fw fa-truck"></i>
+
+                    <span>Delivery Apps</span>
+                </a>
+
+            </li>
+
+            <?php
+            if($priv==10){
+                echo'<li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAcc"
+                        aria-expanded="true" aria-controls="collapseAcc">
+                        <i class="fas fa-fw fa-users"></i>
+                        <span>Manage Accounts</span>
+                    </a>
+                    <div id="collapseAcc" class="collapse" aria-labelledby="headingAcc"
+                        data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <a class="collapse-item" href="acclist.html">Admin accounts</a>
+                            <a class="collapse-item" href="create.html">Add account</a>
+                            <!-- <a class="collapse-item" href="utilities-other.html">Pickups</a> -->
+                        </div>
+                    </div>
+                </li>';
+            }
+
+            ?>
+
+         
+            <hr class="sidebar-divider">
+            <div class="text-center d-none d-md-inline">
+                <button class="rounded-circle border-0" id="sidebarToggle"></button>
+            </div>
+
+
+        </ul>
+        <!-- End of Sidebar -->
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Topbar -->
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+                    <!-- Sidebar Toggle (Topbar) -->
+                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                        <i class="fa fa-bars"></i>
+                    </button>
+
+                    <!-- Topbar Search -->
+                    <!-- <form
+                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                        <div class="input-group">
+                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
+                                aria-label="Search" aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="button">
+                                    <i class="fas fa-search fa-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form> -->
+
+                    <!-- Topbar Navbar -->
+                    <ul class="navbar-nav ml-auto">
+
+                        <!-- Nav Item - Search Dropdown (Visible Only XS) -->
+                        <li class="nav-item dropdown no-arrow d-sm-none">
+                            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-search fa-fw"></i>
+                            </a>
+                            <!-- Dropdown - Messages -->
+                            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
+                                aria-labelledby="searchDropdown">
+                                <form class="form-inline mr-auto w-100 navbar-search">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control bg-light border-0 small"
+                                            placeholder="Search for..." aria-label="Search"
+                                            aria-describedby="basic-addon2">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-primary" type="button">
+                                                <i class="fas fa-search fa-sm"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </li>
+
+
+                        <div class="topbar-divider d-none d-sm-block"></div>
+
+                        <!-- Nav Item - User Information -->
+                        <li class="nav-item dropdown no-arrow">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">
+                                    <?php echo $nav_fname;?>
+                                    <?php echo $nav_lname;?>
+                                </span>
+                                <i class="fas fa-fw fa-user"></i>
+                            </a>
+                            <!-- Dropdown - User Information -->
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                aria-labelledby="userDropdown">
+                                <a class="dropdown-item" href="profile.html">
+                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Profile
+                                </a>
+                                <a class="dropdown-item" href="security.html">
+                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Security
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a style="cursor: pointer;" class="dropdown-item" data-toggle="modal"
+                                    data-target="#logoutModal">
+                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Logout
+                                </a>
+                            </div>
+                        </li>
+
+                    </ul>
+
+                </nav>
+                <!-- End of Topbar -->
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid px-4">
+
+
+                    <div class="row">
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-info shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                                inventory cost</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><span id="remval"></span></div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-money-bill fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-info shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                                Remaining Stock</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800"><span id="totstock"></span></div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-box fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row gx-4">
+
+
+                        
+                        
+
+                        <div class="col-lg-12">
+
+
+                            <div class="card shadow mb-4 col-12">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Stock Report</h6>
+                                </div>
+                                <div class="card shadow mb-4">
+                                    <div class="card-header py-3">
+
+                                        <label for="">Stock-In </label>
+                                        <input type="radio" id="rad1" name="tpe" style="margin-right: 10px;"
+                                            onchange="get_stocks()" checked>
+                                        <label for="">Below Re-Stocking Level </label>
+                                        <input type="radio" id="rad2" name="tpe" style="margin-right: 10px;"
+                                            onchange="get_stocks()">
+                                        <label for="">Stock-Out </label>
+                                        <input type="radio" id="rad3" name="tpe" style="margin-right: 10px;"
+                                            onchange="get_stocks()">
+
+
+
+
+                                    </div>
+                                    <div class="card-header py-3" hidden>
+                                        <div id="btns">
+                                            <a href="./" id="red"> <button class="btn btn-primary" id="btnadjstock"
+                                                    type="button" onclick="">Adjust Inventory</button></a>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered" id="dataTable" width="100%"
+                                                cellspacing="0">
+                                                <thead>
+                                                    <tr>
+                                                        <!-- <th>#</th> -->
+                                                        <th>Item ID</th>
+                                                        <th>Name</th>
+                                                        <th>Category</th>
+                                                        <th>Selling Price</th>
+                                                        <th>Stock Level</th>
+                                                        <th>Re-Stock Level</th>
+                                                        <th>Edit</th>
+                                                    </tr>
+                                                </thead>
+
+                                                <tbody id="tbody">
+
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+
+
+
+
+                        </div>
+
+                        <div class="col-lg-7">
+                            <div class="card mb-4">
+                                <div class="card-header">Edit Stock
+
+                                    <label class="small" id="lastupd"></label>
+                                </div>
+
+                                <div class="card-body">
+
+                                    <div class="row gx-3 mb-3">
+
+                                        <div class="col-md-6">
+
+                                            <label class="small mb-1" for="productname">Product name</label>
+                                            <input class="form-control" id="productname" type="text"
+                                                placeholder="Product name" value="" readonly />
+
+                                        </div>
+
+                                        <div class="col-md-6">
+
+                                            <label class="small mb-1" for="category">Category</label>
+                                            <input class="form-control" id="category" type="text"
+                                                placeholder="Product category" value="" readonly />
+
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="row gx-3 mb-3" hidden>
+
+                                        <div class="col-md-6">
+                                            <label class="small mb-1" for="location">Location</label>
+                                            <input class="form-control" id="location" type="text" placeholder="Location"
+                                                value="" readonly />
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label class="small mb-1" for="group">Group</label>
+                                            <input class="form-control" id="group" type="text" placeholder="Group"
+                                                value="" readonly />
+                                        </div>
+                                    </div>
+
+                                    <div class="row gx-3 mb-3">
+
+
+                                        <div class="col-md-9">
+                                            <label class="small mb-1" for="restocklvl">Re-Stock Level</label>
+                                            <input class="form-control" id="restocklvl" type="text"
+                                                placeholder="Input the re-stock level" value="" />
+                                        </div>
+                                        <div class="col-md-3 mt-4">
+                                            <button class="btn btn-primary" id="restockqnt" type="button" onclick=""><i
+                                                    class="fa fa-save" style="cursor: pointer;" onclick=""></i></button>
+                                        </div>
+
+
+                                    </div>
+                                    <div class="" role="alert" id="alrt" hidden>
+
+                                    </div>
+                                    <div class="row gx-3 mb-3">
+
+                                        <div class="col-md-12">
+                                            <label class="small mb-1" for="restock">Re-Stock</label>
+                                            <input class="form-control" id="restock" type="text"
+                                                placeholder="Input new quantity" value="" />
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="" id="alrt" role="alert" hidden>
+
+                                    </div>
+                                    <div class="" id="alrt2" role="alert" hidden>
+
+                                    </div>
+                                    <div id="btns">
+                                        <button class="btn btn-primary" id="btnrestock" type="button"
+                                            onclick="">Save</button>
+                                        <button class="btn btn-secondary" id="btnclr" type="button"
+                                            onclick="clear_mod()">Cancel</button>
+                                        <a href="stock_history.html" class="btn btn-info" id="" type="button">Stock
+                                            Adjustments</a>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-5 mb-4">
+                            <div class="row">
+
+                                <div class="col-lg-6 mb-4">
+                                    <div class="card bg-danger text-white shadow" id="alert_card">
+                                        <div class="card-body">
+
+                                            <span id="low_stock_title"></span>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+
+
+
+
+
+                    </div>
+                </div>
+                <!-- /.container-fluid -->
+
+            </div>
+            <!-- End of Main Content -->
+            <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; RBF Admin 2022</span>
+                    </div>
+                </div>
+            </footer>
+            <!-- End of Footer -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">x</span>
+                    </button>
+                </div>
+                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-primary" href="./php/logout.php">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="js/sb-admin-2.min.js"></script>
+
+
+    <script src="vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <!-- <script src="js/demo/datatables-demo.js"></script> -->
+    <script>
+        var p = document.getElementById("productname");
+        var c = document.getElementById("category");
+        var l = document.getElementById("location");
+        var g = document.getElementById("group");
+        var reslvl = document.getElementById("restocklvl");
+
+        var rad1 = document.getElementById("rad1");
+        var rad2 = document.getElementById("rad2");
+        var rad3 = document.getElementById("rad3");
+        var lastupd = document.getElementById("lastupd");
+        var btnrestock = document.getElementById("btnrestock");
+        //  var btninactive= document.getElementById("btninactive");
+        var btnclr = document.getElementById("btnclr");
+        var restock = document.getElementById("restock");
+
+        get_stocks();
+        count_low_stocks();
+        get_card_stock();
+        restock_disabled(true);
+
+
+        function alert_div(id) {
+
+            if (id == 1) {
+                document.getElementById("alrt").innerHTML = 'Re-stock level updated successfully!' +
+                    '<span aria-hidden="true" style="float: right;cursor: pointer;" onclick="close_alert();">&times;</span>';
+                document.getElementById("alrt").setAttribute("class", "alert alert-success text-center");
+                document.getElementById("alrt").hidden = false;
+                return;
+            }
+            if (id == 0) {
+                document.getElementById("alrt").innerHTML = 'Something went wrong!' +
+                    '<span aria-hidden="true" style="float: right;cursor: pointer;" onclick="close_alert();">&times;</span>';
+                document.getElementById("alrt").setAttribute("class", "alert alert-danger text-center");
+                document.getElementById("alrt").hidden = false;
+                return;
+            }
+
+        }
+        function alert_div2(id) {
+
+            if (id == 1) {
+                document.getElementById("alrt2").innerHTML = 'Stock has been updated successfully!' +
+                    '<span aria-hidden="true" style="float: right;cursor: pointer;" onclick="close_alert2();">&times;</span>';
+                document.getElementById("alrt2").setAttribute("class", "alert alert-success text-center");
+                document.getElementById("alrt2").hidden = false;
+                return;
+            }
+            if (id == 0) {
+                document.getElementById("alrt2").innerHTML = 'Something went wrong!' +
+                    '<span aria-hidden="true" style="float: right;cursor: pointer;" onclick="close_alert2();">&times;</span>';
+                document.getElementById("alrt2").setAttribute("class", "alert alert-danger text-center");
+                document.getElementById("alrt2").hidden = false;
+                return;
+            }
+
+        }
+
+        function close_alert() {
+            document.getElementById("alrt").hidden = true;
+            document.getElementById("alrt").innerHTML = "";
+            document.getElementById("alrt").setAttribute("class", "");
+
+        }
+        function close_alert2() {
+            document.getElementById("alrt2").hidden = true;
+            document.getElementById("alrt2").innerHTML = "";
+            document.getElementById("alrt2").setAttribute("class", "");
+
+        }
+        function clear_mod() {
+            btnrestock.setAttribute("onclick", "");
+            // btninactive.setAttribute("onclick","");
+            restockqnt.setAttribute("onclick", "");
+            // btninactive.setAttribute("class","btn btn-danger");
+            // btninactive.innerHTML="Move to Inactive";
+            reslvl.value = "";
+            p.value = "";
+            c.value = "";
+            l.value = "";
+            g.value = "";
+            restock.value = "";
+            restock_disabled(true);
+        }
+        function restock_disabled(bool) {
+            btnrestock.disabled = bool;
+            // btninactive.disabled=bool;
+            btnclr.disabled = bool;
+            restock.disabled = bool;
+            reslvl.disabled = bool;
+            restockqnt.disabled = bool;
+        }
+
+
+
+
+        function rad() {
+
+            if (rad1.checked == true) {
+                return 1;
+            }
+            if (rad2.checked == true) {
+                return 2;
+            }
+            if (rad3.checked == true) {
+                return 3;
+            }
+
+        }
+
+
+
+        function get_stocks() {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    //    console.log(this.responseText);
+                    $('#dataTable').DataTable().clear().draw();
+                    if (this.responseText != "") {
+
+                        const tr = $(this.responseText);
+                        for (x = 0; x < tr.length; x++) {
+                            $('#dataTable').DataTable().row.add(tr[x]).draw();
+                        }
+
+                        // document.getElementById("tbody").innerHTML=this.responseText;
+                    }
+                    var ord = "desc";
+                    if (rad() == 2) {
+                        var ord = "asc";
+                    }
+                    $('#dataTable').DataTable().order([[4, ord]]).draw();
+
+                };
+
+            }
+            var formdata = new FormData();
+            formdata.append("id", rad());
+
+            xhttp.open("POST", "./php/call_functions.php?x=get_stocks", true);
+            xhttp.send(formdata);
+        }
+
+
+
+
+
+        function count_low_stocks() {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    //    console.log(this.responseText);
+                    //    if(Number(this.responseText)>0){
+
+                    //    }
+                    set_card(Number(this.responseText));
+                    // get_low_stocks();
+                };
+            }
+            xhttp.open("GET", "./php/call_functions.php?x=count_low_stocks", true);
+            xhttp.send();
+        }
+
+
+        function set_card(count) {
+            if (count > 0) {
+                document.getElementById("alert_card").hidden = false;
+                document.getElementById("alert_card").setAttribute("class", "card bg-danger text-white shadow");
+                if (count > 1) {
+                    document.getElementById("low_stock_title").innerHTML = count + " Items were low on stock!";
+                    return
+                }
+                document.getElementById("low_stock_title").innerHTML = count + " Items was low on stock!";
+                return
+            }
+            document.getElementById("alert_card").hidden = true;
+            document.getElementById("alert_card").setAttribute("class", "card bg-success text-white shadow");
+            document.getElementById("low_stock_title").innerHTML = "All items was on stock!";
+
+
+        }
+
+        function set_stock_inputs(id) {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+
+                if (this.readyState == 4 && this.status == 200) {
+                    // console.log(this.responseText);
+                    if (this.responseText != "") {
+                        const details = JSON.parse(this.responseText);
+                        // console.log(details.item_id);
+
+                        p.value = details.product_name;
+                        c.value = details.category;
+                        l.value = details.location;
+                        g.value = details.group;
+                        restock.value = details.stock;
+                        reslvl.value = details.restock;
+
+
+                        btnrestock.setAttribute("onclick", "upd_restock(" + details.item_id + ");");
+                        // btninactive.setAttribute("onclick","move("+details.item_id+","+details.status+");");
+                        restockqnt.setAttribute("onclick", "restock_qnt(" + details.item_id + ");");
+                        // if(details.status==1){
+                        //     btninactive.setAttribute("class","btn btn-danger");
+                        //     btninactive.innerHTML="Move to Inactive";
+                        // }else{
+                        //     btninactive.setAttribute("class","btn btn-info");
+                        //     btninactive.innerHTML="Move to Active";
+                        // }
+                        // btn btn-danger
+                        restock_disabled(false);
+                        if (isNaN(details.latest_restock)) {
+                            lastupd.innerHTML = "(Last re-stock: " + details.latest_restock + ")";
+                        }
+                        btns.hidden = false;
+                    }
+
+
+                };
+
+            }
+
+            var formdata = new FormData();
+            formdata.append("item_id", id);
+
+
+            xhttp.open("POST", "./php/call_functions.php?x=set_stock_inputs", true);
+            xhttp.send(formdata);
+
+
+
+
+        }
+
+        function restock_qnt(id) {
+
+            restockqnt.innerHTML = '<div class="spinner-border text-secondary" role="status"><span class="sr-only">Loading...</span></div>';
+            var qnt = reslvl.value;
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    //    console.log(this.responseText);
+                    if (!isNaN(this.responseText)) {
+                        alert_div(1);
+                        close_alert2();
+                        get_stocks();
+                        count_low_stocks();
+                        set_stock_inputs(id);
+                    } else {
+                        alert_div(0)
+                    }
+                    restockqnt.innerHTML = '<i class="fa fa-save" style="cursor: pointer;" onclick=""></i>';
+                };
+            }
+
+            var formdata = new FormData();
+            formdata.append("item_id", id);
+            formdata.append("qnt", qnt);
+            xhttp.open("POST", "./php/call_functions.php?x=upd_restockqnt", true);
+            xhttp.send(formdata);
+
+        }
+
+        function upd_restock(id) {
+
+            btnrestock.innerHTML = '<div class="spinner-border text-secondary" role="status"><span class="sr-only">Loading...</span></div>';
+            var qnt = restock.value;
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    console.log(this.responseText);
+                    if (!isNaN(this.responseText)) {
+                        alert_div2(1);
+                        close_alert();
+                        get_stocks();
+                        count_low_stocks();
+                        set_stock_inputs(id);
+                    } else {
+                        alert_div2(0);
+                    }
+                    btnrestock.innerHTML = 'Save';
+                };
+            }
+
+            var formdata = new FormData();
+            formdata.append("item_id", id);
+            formdata.append("qnt", qnt);
+            xhttp.open("POST", "./php/call_functions.php?x=restock", true);
+            xhttp.send(formdata);
+
+        }
+
+
+        function get_card_stock() {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    console.log(this.responseText);
+                    const arr = JSON.parse(this.responseText);
+                    document.getElementById("remval").innerHTML = "₱" + arr[0];
+                    document.getElementById("totstock").innerHTML = arr[1];
+
+                }
+            };
+            xhttp.open("GET", "./php/call_functions.php?x=get_card_stock", true);
+            xhttp.send();
+        }
+    </script>
+</body>
+
+</html>

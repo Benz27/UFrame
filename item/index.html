@@ -1,0 +1,750 @@
+<?php
+session_start();
+
+include("../php/conn.php");
+include("../php/read.php");
+include("../php/about.php");
+
+if(isset($_SESSION['user_id'])){
+    include("../php/cart.php");
+}
+function get_price_range($link,$item_id){
+
+    $sql = "SELECT DISTINCT v_id FROM inventory where item_id=$item_id";
+    $result = mysqli_query($link, $sql);
+    if ($result && mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+
+        $sql = "SELECT min(selling_price) as 'min', max(selling_price) as 'max' FROM inventory where v_id=$row[v_id]";
+        $result = mysqli_query($link, $sql);
+        if ($result && mysqli_num_rows($result) > 0) {
+            $row = mysqli_fetch_assoc($result);
+            if($row['min']==$row['max']){
+                return '₱'.$row['min'];
+            }
+            return '₱'.$row['min'].' - ₱'.$row['max'];
+        }
+    }
+
+}
+
+function get_v_sum($link,$item_id){
+
+    $sql = "SELECT DISTINCT v_id FROM inventory where item_id=$item_id";
+    $result = mysqli_query($link, $sql);
+    if ($result && mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+
+        $sql = "SELECT sum(selling_price) as 'sum' FROM inventory where v_id=$row[v_id]";
+        $result = mysqli_query($link, $sql);
+        if ($result && mysqli_num_rows($result) > 0) {
+            $row = mysqli_fetch_assoc($result);
+            if($row['sum']==NULL){
+                return 0;
+            }
+            return $row['sum'];
+        }
+    }
+
+}
+
+
+$user_data=check_login($link);
+$itm=$_GET['item'];
+$sql = "SELECT * FROM inventory where item_id=$itm";
+$dtitle;
+$result=mysqli_query($link, $sql);  
+if($result && mysqli_num_rows($result) > 0){    
+    $nme=mysqli_fetch_assoc($result); 
+    $dtitle=$nme['name'];
+};
+$qc=0;
+?>
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title><?php echo $abt_name;?> - <?php echo $dtitle;?></title>
+        <!-- Bootstrap icons-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="css/styles.css" rel="stylesheet" />
+        <link rel="stylesheet"  href="css/lightslider.css"/>
+        <style>
+            ul{
+                list-style: none outside none;
+                padding-left: 0;
+                margin: 0;
+            }
+            .demo .item{
+                margin-bottom: 60px;
+            }
+            .content-slider li{
+                background-color: #ed3020;
+                text-align: center;
+                color: #FFF;
+            }
+            .content-slider h3 {
+                margin: 0;
+                padding: 70px 0;
+            }
+            .demo{
+                width: 800px;
+            }
+            .vertical-center {
+                min-height: 100%;  
+                min-height: 100vh;
+                align-items: center;
+            }
+        </style>
+         <script src="js/jquery.min.js"></script>
+         <script src="js/lightslider.js"></script> 
+         <script>
+            $(document).ready(function() {
+               $("#content-slider").lightSlider({
+                   loop:true,
+                   keyPress:true
+               });
+               $('#image-gallery').lightSlider({
+                   gallery:true,
+                   item:1,
+                   thumbItem:9,
+                   slideMargin: 0,
+                   speed:500,
+                   auto:true,
+                   loop:true,
+                   onSliderLoad: function() {
+                       $('#image-gallery').removeClass('cS-hidden');
+                   }  
+               });
+           }); 
+       </script>
+    </head>
+    <body>
+        <!-- Navigation-->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container px-4 px-lg-5">
+                <a class="nav-link" href="../" style="font-family: Myriad;font-weight: bolder;color: black;font-size: 30px;"><?php echo $abt_name;?></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                        <!-- <li class="nav-item"><a class="nav-link" href="../login/">Log in</a></li> -->
+                        <li class="nav-item"><a class="nav-link" href="../aboutus/">About</a></li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="navbarDropdown" style="cursor: pointer;" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown" id="category">
+                                <li><a class="dropdown-item" href="../">All Products</a></li>
+                                <li><hr class="dropdown-divider" /></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <?php
+                            if($s_id){
+                                echo '<a class="nav-link" id="shp" role="button" aria-current="page" href="../profile/">Profile</a>';
+                            }else{
+                                echo '<a class="nav-link" id="shp" role="button" aria-current="page" href="../login/">Log-In</a>';
+                            }
+                            ?>
+                        </li>
+                    </ul>
+         
+                    <?php 
+                    if($s_id){
+                        echo '<a href="../cart/">';
+
+                    }else{
+                        echo '<a href="../login/">';
+                    }
+                    ?>
+
+                   
+                        <button class="btn btn-outline-dark" type="button">
+                            <i class="bi-cart-fill me-1"></i>
+                            Cart
+                            <?php 
+                            if($s_id){
+                                echo '<span class="badge bg-dark text-white ms-1 rounded-pill" id="crtnum"> '.count($s_cart).'</span>';
+
+                            }
+                            ?>
+                        </button>
+                    </a>
+            
+                </div>
+            </div>
+        </nav>
+        <!-- Product section-->
+        <section class="py-5">
+            <div class="container px-4 px-lg-5 my-5">
+                <div class="row gx-4 gx-lg-5 align-items-center">
+                    <?php 
+                    $des="";
+                    $at_det="";
+                    if($result = mysqli_query($link, $sql)){
+
+                        if(mysqli_num_rows($result) > 0){ 
+                          while($row = mysqli_fetch_array($result)){  
+                            $des=$row['description'];
+                            $at_det=$row['ad_details'];
+                            $ky=0;
+                            $a=false;
+                            $stock=$row['quantity'];
+                            $note=$row['note'];
+                            $inh="Add to cart";
+                            $dis="";
+                            $catg=$row['category'];
+                            if($s_id){
+                            foreach (array_keys($s_cart, $row['item_id']) as $key) {
+                                $ky=$key;
+                                $a=true;
+                            }
+                            }
+                            if($a){
+                                if($s_qnt[$ky]==$stock){
+                                    $inh="Max quantity on cart";
+                                    $dis="disabled";
+                                }
+                                $qc=$s_qnt[$ky];
+                            }
+                            if($stock==0){
+                                $dis="disabled";
+                                $inh="Sold Out";
+                            }
+
+                                $med=explode("|",$row['media']);
+
+                                
+                            echo '<div class="col-md-6">
+                                <!-- start -->
+                                <div class="">
+                                    <div class="item">            
+                                        <div class="clearfix" style="max-width:474px;">
+                                            <ul id="image-gallery" class="gallery list-unstyled cS-hidden">';
+                                                for($x=0;$x<count($med);$x++){
+                                                    echo '<li data-thumb="'.'../images/products/'.$row['item_id'].'/'.$med[$x].'"> 
+                                                        <img class="img-fluid" src="'.'../images/products/'.$row['item_id'].'/'.$med[$x].'" />
+                                                    </li> ';
+                                                  };
+
+                                            echo '</ul>
+                                        </div>
+                                    </div>
+                            
+                            
+                                </div>	
+                                <!-- end -->
+                            </div>
+                            <div class="col-md-6">
+
+                                <h1 class="display-5 fw-bolder">'.$row['name'].'</h1>
+                                <div class="fs-5 mb-5">
+                                    <!-- <span class="text-decoration-line-through"></span> -->
+                                    <span>₱'.$row['selling_price'].'</span>
+                                    <hr>';
+                                    if($des!=""){
+                                  echo'<p class="lead small">'.$des.'</p>';
+                                    }
+                               echo' </div>';
+                                if($row['quantity']>0){
+                                  echo'<div class="small mb-1"><span id="stck">'.$row['quantity'].'</span> pieces available</div>';
+                                }else{
+                                    echo'<div class="small mb-1">Sold Out</div>';
+                                }
+
+
+                                echo'
+                                <div class="d-flex">';
+                                    if($s_id){
+                                        echo'
+                                        <button id="min" class="btn-dark"style="width: 40px;" onclick="quan(-1)" '.$dis.'>-</button>
+                                    <input class="form-control text-center" id="qnt" value="1" style="max-width: 3rem" '.$dis.' onkeypress="return numonly(event);" onkeyup="qnl(this.value);" />
+                                    <button id="max" class="me-3 btn-dark" style="width: 40px;" onclick="quan(1)" '.$dis.'>+</button>
+ 
+                                    <button class="btn btn-outline-dark flex-shrink-0" id="'.$row['item_id'].'" value="0" onclick="addto(this.id, this.value,1,'.$stock.')" type="button" '.$dis.'>
+                                        <i class="bi-cart-fill me-1"></i>
+                                        Add to cart
+                                    </button>';
+                                    }else{
+                                        echo'
+ 
+                                    <a href="../login/"><button class="btn btn-outline-dark flex-shrink-0" id="'.$row['item_id'].'" value="0" type="button">
+                                        <i class="bi-cart-fill me-1"></i>
+                                        Log-in to access your cart
+                                    </button></a>';
+                                    }
+                                    
+                                    echo'
+                                </div>
+                                <p class="mt-1" style="color: red;" id="alrt" hidden>You have reached the maximum quantity for this item</p>
+                            </div>';
+
+                }
+            }
+        }
+                    ?>
+                </div>
+            </div>
+
+        </section>
+
+        <section class="py-5 bg-light">
+            <div class="container px-4 px-lg-5">
+               
+                    <!-- start -->
+
+                    <?php 
+
+
+                if($at_det!=""){
+
+               
+                    echo  ' 
+                    <div class="card-header">
+                        <h3 class="fw-bolder mb-4">Additional Details</h3>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="container">
+
+
+                                <pre class="">'.$at_det.'</pre>
+                            </div>
+
+                     </div>
+                   
+                </div>';
+                    
+            }
+
+
+
+
+
+
+                    
+
+                      
+                      
+                      
+              
+                
+                ?>
+                          
+                          
+                        
+
+
+
+
+
+                
+            </div>
+        </section>
+
+
+
+        <!-- Related items section-->
+        <section class="py-5 bg-light">
+            <div class="container px-4 px-lg-5">
+               
+                    <!-- start -->
+
+                    <?php 
+                    $sql="SELECT * FROM `inventory` WHERE `v_id` = 0 and (category like '%$catg%') and item_id <> $itm
+                    UNION
+                    SELECT * FROM `inventory` WHERE `v_id` IN (SELECT DISTINCT `v_id` from `inventory` WHERE `v_id` > 0) and (category like '%$catg%') and item_id <> $itm GROUP BY `v_id`;
+                    ";
+
+
+                    if($result = mysqli_query($link, $sql)){
+
+                        if(mysqli_num_rows($result) > 0){ 
+                        echo  ' <h2 class="fw-bolder mb-4">Related products</h2>
+                                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">';
+                          while($row = mysqli_fetch_array($result)){ 
+
+                           $k;
+                            $a=false;
+                            
+                            if($row['v_id']>0){
+                                $iitem_id=$row['item_id'];
+                                $stock=get_v_sum($link,$iitem_id);
+                            }else{
+                                $stock=$row['quantity'];
+                            }
+                            $inh="On Stock";
+                            $dis="";
+                            if($s_id){
+                            foreach (array_keys($s_cart, $row['item_id']) as $key) {
+                                $k=$key;
+                                $a=true;
+                            }
+                        }
+                            if($a){
+                                if($s_qnt[$k]==$stock){
+                                    $inh="Max quantity on cart";
+
+                                }
+                            }
+                            if($stock==0){
+
+                                $inh="Out of stock";
+                            }
+                            
+
+                            $med=explode("|",$row['media']);
+            echo '<div class="col mb-5">
+                        <div class="card h-100">
+                        
+                            <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">'.$inh.'</div>';
+                        
+                            if($row['v_id']>0){
+                                echo'<a href="../vitem/?item='.$row['v_id'].'">
+                                    <img class="img-fluid" style="width: 300px;height: 300px;" 
+                                    src="'. '../images/vproducts/'.$row['v_id'].'/'.$med[0] .'" alt="..." />
+                                    </a>';
+
+                            }else{
+                                echo'<a href="../item/?item='.$row['item_id'].'">
+                                    <img class="img-fluid" style="width: 300px;height: 300px;" 
+                                    src="'. '../images/products/'.$row['item_id'].'/'.$med[0] .'" alt="..." />
+                                    </a>';
+
+                            }                        
+                            echo' <div class="card-body p-4">
+                                <div class="text-center">
+                          
+                                    <h5 class="fw-bolder">'.$row['name'].'</h5>
+                        
+                                    <!-- <span class="text-muted text-decoration-line-through">₱50</span> -->
+                                    ';
+
+                               
+                                    if($row['v_id']>0){
+                                        $iitem_id=$row['item_id'];
+                                        echo get_price_range($link,$iitem_id);
+                                        
+                                    }else{
+                                        echo'₱'.$row['selling_price'];
+                                    }
+                                    
+                                echo'</div>
+                            </div>
+                        
+                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">';
+                                if($row['v_id']>0){
+                                    echo'  <div class="text-center"> <a href="../vitem/?item='.$row['v_id'].'">
+                                        <button class="btn btn-outline-dark mt-auto" id="'.$row['item_id'].'" >View Options</button></a>
+                                        </div>';
+                                }else{
+                                    echo'  <div class="text-center"> <a href="../item/?item='.$row['item_id'].'">
+                                        <button class="btn btn-outline-dark mt-auto" id="'.$row['item_id'].'" >View More</button></a>
+                                        </div>';
+                                }                            
+                                echo'</div>
+                    </div> 
+                </div> ';
+
+                           }
+                           echo '</div>';
+                        }
+                    }
+                          
+                          
+                          
+                        
+                    
+                    ?>
+                    <!-- end -->
+                    <!-- <span class="text-muted text-decoration-line-through">$50.00</span> -->
+                                                        <!-- Sale badge-->
+                                    <!-- <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Sale</div> -->
+                                    <!-- Product image-->
+                
+            </div>
+        </section>
+        <section class="py-5 bg-light">
+            <div class="container px-4 px-lg-5">
+               
+                    <!-- start -->
+
+                    <?php 
+                    $sql="SELECT * FROM `inventory` WHERE `v_id` = 0 and (category not like '%$catg%') and item_id <> $itm
+                    UNION
+                    SELECT * FROM `inventory` WHERE `v_id` IN (SELECT DISTINCT `v_id` from `inventory` WHERE `v_id` > 0) and (category not like '%$catg%') and item_id <> $itm GROUP BY `v_id`;
+                    ";
+
+
+                    if($result = mysqli_query($link, $sql)){
+
+                        if(mysqli_num_rows($result) > 0){ 
+                        echo  ' <h2 class="fw-bolder mb-4">Other products</h2>
+                                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">';
+                          while($row = mysqli_fetch_array($result)){ 
+
+                           $k;
+                            $a=false;
+                            
+                            if($row['v_id']>0){
+                                $iitem_id=$row['item_id'];
+                                $stock=get_v_sum($link,$iitem_id);
+                            }else{
+                                $stock=$row['quantity'];
+                            }
+                            $inh="On Stock";
+                            $dis="";
+                            if($s_id){
+                            foreach (array_keys($s_cart, $row['item_id']) as $key) {
+                                $k=$key;
+                                $a=true;
+                            }
+                        }
+                            if($a){
+                                if($s_qnt[$k]==$stock){
+                                    $inh="Max quantity on cart";
+
+                                }
+                            }
+                            if($stock==0){
+
+                                $inh="Out of stock";
+                            }
+                            
+
+                            $med=explode("|",$row['media']);
+            echo '<div class="col mb-5">
+                        <div class="card h-100">
+                        
+                            <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">'.$inh.'</div>';
+                        
+                            if($row['v_id']>0){
+                                echo'<a href="../vitem/?item='.$row['v_id'].'">
+                                    <img class="img-fluid" style="width: 300px;height: 300px;" 
+                                    src="'. '../images/vproducts/'.$row['v_id'].'/'.$med[0] .'" alt="..." />
+                                    </a>';
+
+                            }else{
+                                echo'<a href="../item/?item='.$row['item_id'].'">
+                                    <img class="img-fluid" style="width: 300px;height: 300px;" 
+                                    src="'. '../images/products/'.$row['item_id'].'/'.$med[0] .'" alt="..." />
+                                    </a>';
+
+                            }                        
+                            echo' <div class="card-body p-4">
+                                <div class="text-center">
+                          
+                                    <h5 class="fw-bolder">'.$row['name'].'</h5>
+                        
+                                    <!-- <span class="text-muted text-decoration-line-through">₱50</span> -->
+                                    ';
+
+                               
+                                    if($row['v_id']>0){
+                                        $iitem_id=$row['item_id'];
+                                        echo get_price_range($link,$iitem_id);
+                                        
+                                    }else{
+                                        echo'₱'.$row['selling_price'];
+                                    }
+                                    
+                                echo'</div>
+                            </div>
+                        
+                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">';
+                                if($row['v_id']>0){
+                                    echo'  <div class="text-center"> <a href="../vitem/?item='.$row['v_id'].'">
+                                        <button class="btn btn-outline-dark mt-auto" id="'.$row['item_id'].'" >View Options</button></a>
+                                        </div>';
+                                }else{
+                                    echo'  <div class="text-center"> <a href="../item/?item='.$row['item_id'].'">
+                                        <button class="btn btn-outline-dark mt-auto" id="'.$row['item_id'].'" >View More</button></a>
+                                        </div>';
+                                }                            
+                                echo'</div>
+                    </div> 
+                </div> ';
+
+                           }
+                           echo '</div>';
+                        }
+                    }
+                          
+                          
+                          
+                        
+                    
+                    ?>
+                    <!-- end -->
+                    <!-- <span class="text-muted text-decoration-line-through">$50.00</span> -->
+                                                        <!-- Sale badge-->
+                                    <!-- <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Sale</div> -->
+                                    <!-- Product image-->
+                
+            </div>
+        </section>
+        <!-- Footer-->
+        <footer class="py-5 bg-dark">
+            <div class="container"><p class="m-0 text-center text-white">Copyright &copy; <?php echo $abt_name;?> 2022</p></div>
+        </footer>
+        <div id="myModal" class="modal vertical-center">
+
+            <div class="modal-dialog" role="document">
+                <div class="modal-content border border-4 border-dark">
+
+                  <div class="modal-body align-self-center">
+                    <p class="bi-cart-check" style="font-size: 100px;"></p>
+                  </div>
+                  <div class="modal-footer align-self-center">Item has been added to your cart.</div>
+                </div>
+              </div>
+            
+          </div>
+          <style type="text/css">
+            @import url('https://fonts.googleapis.com/css2?family=Birthstone&family=Poppins:ital,wght@0,400;0,500;0,600;1,600;1,800&display=swap');
+            </style>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Core theme JS-->
+        <!-- <script src="https://mdbcdn.b-cdn.net/wp-content/themes/mdbootstrap4/docs-app/js/dist/mdb5/plugins/ecommerce-gallery.min.js"></script> -->
+        <script>
+                  asize=Number(document.getElementById("stck").innerHTML) - Number("<?php echo $qc?>");
+
+var modal = document.getElementById("myModal");
+
+modal.onclick = function() {
+  modal.style.display = "none";
+
+}
+
+window.onclick = function(event) {
+    modal.style.display = "none";
+
+}
+
+
+get_categories();
+
+function get_categories(){
+    var xhttp = new XMLHttpRequest();
+           xhttp.onreadystatechange = function() {
+           if(this.readyState == 4 && this.status == 200){
+            const arr= this.responseText.split(",");
+
+            const element = document.getElementById("category");
+               for(x=0;x<arr.length;x++){
+                const li = document.createElement("li");
+                const a = document.createElement("a");
+                const atxt = document.createTextNode(arr[x]);
+                a.setAttribute("class","dropdown-item");
+                a.appendChild(atxt);
+                a.href="../?s="+arr[x];
+                li.appendChild(a);
+                element.appendChild(li);
+               }
+
+
+        };
+           }
+
+
+
+           xhttp.open("GET", "../php/call_functions.php?x=get_categories", true);
+           xhttp.send();
+    
+}
+
+
+
+            function addto(x ,z,a,st) {
+        var btn = document.getElementById(x);
+        var i="";
+        var q=1;
+        if(a==1){
+            i='<i class="bi-cart-fill me-1"></i>';
+            q=Number(document.getElementById("qnt").value);
+        }
+       
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+           
+          if (this.readyState == 4 && this.status == 200) {
+            
+            var str=this.responseText;
+            const ar= str.split(",");
+            var y = ar[0];
+            console.log(ar[0]+", "+ar[1]);
+            console.log(ar[2]);
+            if (y==1){
+                modal.style.display = "flex";
+                
+            }else if(y==4){
+                
+            modal.style.display = "flex";
+            //   btn.value=0;
+            btn.innerHTML=i+"Max quantity on cart";
+            //   btn.setAttribute("class","btn btn-outline-dark mt-auto");
+            btn.disabled=true;
+                if(a==1){
+                    document.getElementById("min").disabled=true;
+                    document.getElementById("max").disabled=true;
+                    document.getElementById("qnt").disabled=true;
+                }
+            }
+            asize=Number(document.getElementById("stck").innerHTML) - Number(ar[2]);
+            document.getElementById("alrt").hidden=true;
+            document.getElementById("crtnum").innerHTML=ar[1];
+            document.getElementById("qnt").value=1;
+          }
+        };
+        xhttp.open("GET", "../php/fncart.php?id="+x+"&x="+z+"&st="+st+"&q="+q, true);
+        xhttp.send();
+      }
+
+function quan(x){
+
+var y=Number(document.getElementById("qnt").value);
+  if(y>1||x==1){
+    if(y<=Number(asize)||x==-1){
+    y+=Number(x);
+     if(y>asize){
+        document.getElementById("alrt").hidden=false;
+     }else{
+        document.getElementById("qnt").value=y;
+        document.getElementById("alrt").hidden=true;
+     }
+  }
+}
+
+
+
+}
+
+var prd=false;
+
+function numonly(e) {
+    e = (e) ? e : window.event;
+    var chr = (e.which) ? e.which : e.keyCode;
+    if (chr > 31 && (chr < 48 || chr > 57)) {
+     return false;
+    }else{
+      return true;
+    }
+}
+
+function qnl(x){
+    if(!isNaN(x) && x!=""){
+        if(x>asize){
+        document.getElementById("qnt").value=asize;
+        document.getElementById("alrt").hidden=false;
+        }else{
+        document.getElementById("alrt").hidden=true;
+        }
+    }
+}
+        </script>
+    </body>
+</html>

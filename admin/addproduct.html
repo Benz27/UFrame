@@ -1,0 +1,1056 @@
+<?php
+session_start();
+
+include("./php/conn.php"); 
+include("./php/read.php");
+
+$user_data=check_login($alink);
+
+?>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>RBF Admin</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+
+</head>
+
+<body id="page-top">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+            <!-- Sidebar - Brand -->
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+                <!-- <div class="sidebar-brand-icon rotate-n-15">
+                    <i class="fas fa-laugh-wink"></i>
+                </div> -->
+                <div class="sidebar-brand-text mx-3">RBF Admin</div>
+            </a>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider my-0">
+
+            <!-- Nav Item - Dashboard -->
+            <li class="nav-item">
+                <a class="nav-link" href="index.html">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Dashboard</span></a>
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                Interface
+            </div>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true"
+                    aria-controls="collapseTwo">
+                    <i class="fas fa-fw fa-user"></i>
+                    <span>Account</span>
+                </a>
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <!-- <h6 class="collapse-header">Custom Components:</h6> -->
+                        <a class="collapse-item" href="profile.html">Profile</a>
+                        <a class="collapse-item" style="cursor: pointer;" data-toggle="modal" data-target="#logoutModal">Log-Out</a>
+                    </div>
+                </div>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="sitedetails.html"
+                    aria-expanded="true" aria-controls="collapsesitedet">
+                    <i class="fas fa-fw fa-store"></i>
+
+                    <span>Shop Details</span>
+                </a>
+ 
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="order_list.html"
+                    aria-expanded="true" aria-controls="collapseOrders">
+                    <i class="fas fa-fw fa-list-alt"></i>
+
+                    <span>Orders</span>
+                </a>
+ 
+            </li>
+            
+            <li class="nav-item active">
+                <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseInventory"
+                    aria-expanded="true" aria-controls="collapseInventory">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Products</span>
+                </a>
+                <div id="collapseInventory" class="collapse show" aria-labelledby="headingInventory"
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <!-- <a class="collapse-item" href="productlist.html">Product list</a> -->
+                            <a class="collapse-item dropdown-toggle active" role="button" id="addproduct" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Add Product
+                            </a>
+                            <!-- Dropdown - User Information -->
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                aria-labelledby="addproduct">
+                                <a class="dropdown-item active" href="addproduct.html">
+                                    Single product
+                                </a>
+                                <a class="dropdown-item" href="addproduct_v.html">
+                                    Product with variants
+                                </a>
+                            </div>
+
+                        <a class="collapse-item" href="stocks.html">Products</a>
+                        <a class="collapse-item" href="categories.html">Categories</a>
+                    </div>
+                </div>
+            </li>
+
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAnalytics" aria-expanded="true"
+                    aria-controls="collapseAnalytics">
+                    <i class="fas fa-fw fa-chart-line"></i>
+                    <span>Reports</span>
+                </a>
+                <div id="collapseAnalytics" class="collapse" aria-labelledby="headingAnalytics"
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <!-- <h6 class="collapse-header">Custom Components:</h6> -->
+                        <a class="collapse-item" href="orders_sales.html">Order Sales</a>
+                        <a class="collapse-item" href="sales.html">Sales by Date</a>
+                        <a class="collapse-item" href="product_sales.html">Product Sales</a>
+                        <a class="collapse-item" href="category_sales.html">Product Category Sales</a>
+                        <a class="collapse-item" href="shipment.html">Shipments</a>
+                    </div>
+                </div>
+            </li>
+
+
+
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="customers.html"
+                    aria-expanded="true" aria-controls="collapseCustomer">
+                    <i class="fas fa-fw fa-user"></i>
+
+                    <span>Customers</span>
+                </a>
+ 
+            </li>
+
+
+            <li class="nav-item">
+                <a class="nav-link" href="transportapps.html" 
+                    aria-expanded="true" aria-controls="collapseTransport">
+                    <i class="fas fa-fw fa-truck"></i>
+
+                    <span>Delivery Apps</span>
+                </a>
+
+            </li>
+
+            <?php
+            if($priv==10){
+                echo'<li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAcc"
+                        aria-expanded="true" aria-controls="collapseAcc">
+                        <i class="fas fa-fw fa-users"></i>
+                        <span>Manage Accounts</span>
+                    </a>
+                    <div id="collapseAcc" class="collapse" aria-labelledby="headingAcc"
+                        data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <a class="collapse-item" href="acclist.html">Admin accounts</a>
+                            <a class="collapse-item" href="create.html">Add account</a>
+                            <!-- <a class="collapse-item" href="utilities-other.html">Pickups</a> -->
+                        </div>
+                    </div>
+                </li>';
+            }
+
+            ?>
+
+         
+            <hr class="sidebar-divider">
+            <!-- Nav Item - Pages Collapse Menu -->
+            
+            <div class="text-center d-none d-md-inline">
+                <button class="rounded-circle border-0" id="sidebarToggle"></button>
+            </div>
+
+        </ul>
+        <!-- End of Sidebar -->
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Topbar -->
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+                    <!-- Sidebar Toggle (Topbar) -->
+                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                        <i class="fa fa-bars"></i>
+                    </button>
+
+                    <!-- Topbar Search -->
+                    <!-- <form
+                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                        <div class="input-group">
+                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
+                                aria-label="Search" aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="button">
+                                    <i class="fas fa-search fa-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form> -->
+
+                    <!-- Topbar Navbar -->
+                    <ul class="navbar-nav ml-auto">
+
+                        <!-- Nav Item - Search Dropdown (Visible Only XS) -->
+   
+                        <!-- <li class="nav-item dropdown no-arrow d-sm-none">
+                            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-search fa-fw"></i>
+                            </a>
+         
+                            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
+                                aria-labelledby="searchDropdown">
+                                <form class="form-inline mr-auto w-100 navbar-search">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control bg-light border-0 small"
+                                            placeholder="Search for..." aria-label="Search"
+                                            aria-describedby="basic-addon2">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-primary" type="button">
+                                                <i class="fas fa-search fa-sm"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </li> -->
+               
+
+                        <div class="topbar-divider d-none d-sm-block"></div>
+
+                        <!-- Nav Item - User Information -->
+                        <li class="nav-item dropdown no-arrow">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo $nav_fname;?> <?php echo $nav_lname;?></span>
+                                <i class="fas fa-fw fa-user"></i>
+                            </a>
+                            <!-- Dropdown - User Information -->
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                aria-labelledby="userDropdown">
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Profile
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Settings
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Activity Log
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Logout
+                                </a>
+                            </div>
+                        </li>
+
+                    </ul>
+
+                </nav>
+                <!-- End of Topbar -->
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <div class="container-xl px-4 mt-4">
+                        <!-- Account page navigation-->
+                        <div class="row">
+                            <div class="col-xl-4">
+                                <!-- Profile picture card-->
+                                <!-- <div class="card mb-4 mb-xl-0">
+                                    <div class="card-header">Profile Picture</div>
+                                    <div class="card-body text-center"> -->
+                                        <!-- Profile picture image-->
+                                        <!-- <img class="img-account-profile rounded-circle mb-2" src="<?php echo $about_pic;?>" alt="" height="200px" id="my_img" width="200px"/> -->
+                                       
+                                        <!-- Profile picture help block-->
+                                        <!-- <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div> -->
+                                        <!-- Profile picture upload button-->
+                                        <!-- <button class="btn btn-primary" onclick="ifile.click();" type="button">Upload new image</button>
+                                    </div>
+                                </div> -->
+                            </div>
+                            <div class="col-xl-12">
+
+                                <div class="card mb-4">
+                                    <div class="card-header">Product details</div>
+                                    <div class="card-body">
+
+                                            <div class="row gx-3 mb-3">
+                                   
+                                                <div class="col-md-6">
+                                                    <span style="color: red;">*</span>
+                                                    <label class="small mb-1" for="productname">Product name</label>
+                                                      <input class="form-control" id="productname" type="text" placeholder="Enter the product name" value=""/>
+                                                      <small id="emp1" style="color: red;" hidden>This field cannot be empty!</small>                                                </div>
+                                    
+                                                <div class="col-md-6">
+                                                    <span style="color: red;">*</span>
+                                                    <label class="small mb-1" for="category">Category</label>
+                                                      <select class="form-control" id="category" type="text" placeholder="Enter the product category" value="">
+                                                      </select>
+                                                      <small id="emp2" style="color: red;" hidden>This field cannot be empty!</small>                                                </div>
+                                                </div>
+
+
+
+                                            <div class="row gx-3 mb-3" hidden>
+                                   
+                                                <div class="col-md-6">
+                                                    <label class="small mb-1" for="location">Location</label>
+                                                    <input class="form-control" id="location" type="text" placeholder="Enter the location" value=""/>
+                                                </div>
+                                    
+                                                <div class="col-md-6">
+                                                    <label class="small mb-1" for="group">Group</label>
+                                                    <input class="form-control" id="group" type="text" placeholder="Enter the group" value=""/>
+                                                </div>
+                                            </div>
+                            
+                                           
+                                            
+
+
+
+                                            <!-- <hr>
+                                            <div class="row gx-3 mb-3">
+
+                                                <div class="col-md-4">
+                                                    <span style="color: red;">*</span>
+                                                        <label class="small mb-1" for="investment">Supplier</label>
+                                                        <input class="form-control" id="investment" type="text" placeholder="Enter the value spent" value="0"/>
+                                                        <small id="emp5" style="color: red;" hidden>This field cannot be empty!</small>
+                                                    </div>
+
+                                                <div class="col-md-4">
+                                                    <span style="color: red;">*</span>
+                                                    <label class="small mb-1" for="price">Contact No.</label>
+                                                    <input class="form-control" id="price" type="text" placeholder="Enter the value per quantity" value="0"/>
+                                                    <small id="emp6" style="color: red;" hidden>This field cannot be empty!</small>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <span style="color: red;">*</span>
+                                                    <label class="small mb-1" for="tax">Email</label>
+                                                    <input class="form-control" id="tax" type="text" placeholder="Enter tax" value="0"/>
+                                                    <small id="emp7" style="color: red;" hidden>This field cannot be empty!</small>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <span style="color: red;">*</span>
+                                                    <label class="small mb-1" for="tax">Street</label>
+                                                    <input class="form-control" id="tax" type="text" placeholder="Enter tax" value="0"/>
+                                                    <small id="emp7" style="color: red;" hidden>This field cannot be empty!</small>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <span style="color: red;">*</span>
+                                                    <label class="small mb-1" for="tax">City</label>
+                                                    <input class="form-control" id="tax" type="text" placeholder="Enter tax" value="0"/>
+                                                    <small id="emp7" style="color: red;" hidden>This field cannot be empty!</small>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <span style="color: red;">*</span>
+                                                    <label class="small mb-1" for="tax">Province</label>
+                                                    <input class="form-control" id="tax" type="text" placeholder="Enter tax" value="0"/>
+                                                    <small id="emp7" style="color: red;" hidden>This field cannot be empty!</small>
+                                                </div>
+                                            </div> -->
+
+
+
+
+
+                                            <div class="row gx-3 mb-3" hidden>
+                                                <div class="col-md-8">
+                                                    <label class="small mb-1" for="supplier">Supplier</label>
+                                                    <input class="form-control" id="supplier" type="text" placeholder="Enter the supplier" value=""/>
+                                                </div>
+
+                                                <div class="col-md-4">
+                                                    <label class="small mb-1" for="supplierlist"></label>
+                                                    <select class="form-control mt-1" id="supplierlist" aria-label="Supplier List">
+                                                        <!-- <option value="1">One</option>
+                                                        <option value="2">Two</option>
+                                                        <option value="3">Three</option> -->
+                                                      </select>
+                                                </div>
+
+
+                                                </div>
+
+
+
+                                            <div class="mb-3" hidden>
+                                                <label class="small mb-1" for="note">Notes</label>
+                                                <input class="form-control" id="note" type="text" placeholder="Enter the notes" value=""/>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="small mb-1" for="description">Description</label>
+                                                <textarea class="form-control" id="description" cols="30" rows="5" placeholder="Enter the description"></textarea>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="small mb-1" for="ad_details">Additonal Details</label>
+                                                <textarea class="form-control" id="ad_details" cols="30" rows="7" placeholder="Enter the details"></textarea>
+                                            </div>
+
+
+                                            <div class="card card-header-actions mb-4 mb-lg-2">
+                                                <div class="card-header">
+                                                    Item Media
+                                                    <i class="text-muted" data-feather="info" data-bs-toggle="tooltip" data-bs-placement="left" title=""></i>
+                                                </div>
+                                                <div class="card-header">
+                                                    <button id="btnc" type="button" onclick="adm(0,this.id);ifile.click();" class="btn-outline-dark">Add Media</button>
+                                                    <input type="file" id = "ifile" hidden>
+                                                </div>
+                                                <div class="row no-gutters" id="ime">
+                                                </div>
+                                            </div>
+
+                                        
+                                    </div>
+                                </div>
+                                <div class="card mb-4">
+                                    <div class="card-header">Physical details</div>
+                                    <div class="card-body">
+                                        <div class="row gx-3 mb-3">
+
+                                            <div class="col-md-9">
+                                                <span style="color: red;">*</span>
+                                                <label class="small mb-1" for="weight">Weight</label>
+                                                <input class="form-control" id="weight" type="text" placeholder="Enter the product weight" value=""/>
+                                                <small id="emp7" style="color: red;" hidden>This field cannot be empty!</small>
+                                            </div>
+                                            <div class="col-md-3">
+  
+                                                <label class="small mb-1" for="weight_unit">Unit</label>
+                                                  <select class="form-control" id="weight_unit" type="text">
+                                                      <option value="oz">ounces</option>
+                                                      <option value="lb">pounds</option>
+                                                      <option value="mg">milligram</option>
+                                                      <option value="g">gram</option>
+                                                      <option value="kg">kilogram</option>
+                                                  </select>
+                                                    </div>
+
+                                            </div>
+
+                                            <div class="row gx-3 mb-3">
+
+                                                <div class="col-md-3">
+                                                    <span style="color: red;">*</span>
+                                                    <label class="small mb-1" for="height">Height</label>
+                                                    <input class="form-control" id="height" type="text" placeholder="Enter the product height" value=""/>
+                                                    <small id="emp8" style="color: red;" hidden>This field cannot be empty!</small>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <span style="color: red;">*</span>
+                                                    <label class="small mb-1" for="width">Width</label>
+                                                    <input class="form-control" id="width" type="text" placeholder="Enter the product width" value=""/>
+                                                    <small id="emp9" style="color: red;" hidden>This field cannot be empty!</small>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <span style="color: red;">*</span>
+                                                    <label class="small mb-1" for="length">Length</label>
+                                                    <input class="form-control" id="length" type="text" placeholder="Enter the product length" value=""/>
+                                                    <small id="emp10" style="color: red;" hidden>This field cannot be empty!</small>
+                                                </div>
+                                                <div class="col-md-3">
+  
+                                                    <label class="small mb-1" for="length_unit">Unit</label>
+                                                      <select class="form-control" id="length_unit" type="text">
+                                                        <option value="mm">millimeter</option>
+                                                          <option value="in">inches</option>
+                                                          <option value="cm">centimeter</option>
+                                                          <option value="dm">decimeter</option>
+                                                          <option value="m">meter</option>
+
+                                                      </select>
+                                                        </div>
+    
+                                            </div>
+
+
+
+                                        </div>
+                                    </div>
+                          
+
+                                <div class="card mb-4">
+                                    <div class="card-header">Sales details</div>
+                                    <div class="card-body">
+                                        <div class="row gx-3 mb-3">
+
+                                            <div class="col-md-4" hidden>
+                                                <span style="color: red;">*</span>
+                                                    <label class="small mb-1" for="origprice">Cost per unit</label>
+                                                    <input class="form-control" id="origprice" type="text" placeholder="Enter the original value" value="0"/>
+                                                    <small id="emp5" style="color: red;" hidden>This field cannot be empty!</small>
+                                            </div>
+
+                                            <div class="col-md-12">
+                                                <span style="color: red;">*</span>
+                                                <label class="small mb-1" for="charge">Selling price</label>
+                                                <input class="form-control" id="charge" type="text" placeholder="Enter the profut value" value="0"/>
+                                                <small id="emp5" style="color: red;" hidden>This field cannot be empty!</small>
+                                            </div>
+                                            <div class="col-md-6" hidden>
+                                                <span style="color: red;">*</span>
+                                                <label class="small mb-1" for="tax">Tax</label>
+                                                <input class="form-control" id="tax" type="text" placeholder="Enter tax" value="0"/>
+                                                <small id="emp6" style="color: red;" hidden>This field cannot be empty!</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card mb-4">
+                                    <div class="card-header">Inventory details</div>
+                                    <div class="card-body">
+                                        <div class="row gx-3 mb-3">
+
+                                            <div class="col-md-6">
+                                                <span style="color: red;">*</span>
+                                                    <label class="small mb-1" for="stock">Quantity</label>
+                                                    <input class="form-control" id="stock" type="text" placeholder="Enter the quantity" value="0"/>
+                                                    <small id="emp3" style="color: red;" hidden>This field cannot be empty!</small>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <span style="color: red;">*</span>
+                                                <label class="small mb-1" for="restock">Re-stock level</label>
+                                                <input class="form-control" id="restock" type="text" placeholder="Enter the re-stock count" value="0"/>
+                                                <small id="emp4" style="color: red;" hidden>This field cannot be empty!</small>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="" id="alrt" role="alert" hidden>
+                                         
+                                            
+                                </div>
+                                <button class="btn btn-primary" id="btn" type="button" onclick="save();">Add</button>
+
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <!-- Body -->
+
+                </div>
+                <!-- /.container-fluid -->
+
+            </div>
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; RBF Admin 2022</span>
+                    </div>
+                </div>
+            </footer>
+            <!-- End of Footer -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">x</span>
+                    </button>
+                </div>
+                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-primary" href="login.html">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="js/sb-admin-2.min.js"></script>
+
+
+    <script>
+var usertype;
+var imgbase64;
+var fnm;
+var ss=0;
+var bt=0;
+var bid;
+var mlist=[];
+var b64arr=[];
+var fnmarr=[];
+
+var p=document.getElementById("productname");
+    var c=document.getElementById("category");
+    var l=document.getElementById("location");
+    var g=document.getElementById("group");
+    var s=document.getElementById("stock");
+    var rs=document.getElementById("restock");
+    var i=document.getElementById("origprice");
+    var pr=document.getElementById("charge");
+    var t=document.getElementById("tax");
+    var supp=document.getElementById("supplier");
+    var des=document.getElementById("description");
+    var note=document.getElementById("note");
+    var btn=document.getElementById("btn");   
+    var supplist=document.getElementById("supplierlist"); 
+    var ad_details=document.getElementById("ad_details"); 
+    
+    var weight=document.getElementById("weight"); 
+    var weight_unit=document.getElementById("weight_unit"); 
+
+    var height=document.getElementById("height"); 
+    var width=document.getElementById("width"); 
+    var length=document.getElementById("length"); 
+    var length_unit=document.getElementById("length_unit"); 
+
+
+
+    get_categories();
+function clear_mod(id){
+        p.setAttribute("style","border-color:rgba(210,215,223,255);");
+        c.setAttribute("style","border-color:rgba(210,215,223,255);");
+
+        s.setAttribute("style","border-color:rgba(210,215,223,255);");
+        rs.setAttribute("style","border-color:rgba(210,215,223,255);");
+        i.setAttribute("style","border-color:rgba(210,215,223,255);");
+        pr.setAttribute("style","border-color:rgba(210,215,223,255);");
+        t.setAttribute("style","border-color:rgba(210,215,223,255);");
+
+
+        weight.setAttribute("style","border-color:rgba(210,215,223,255);"); 
+
+        height.setAttribute("style","border-color:rgba(210,215,223,255);");
+        width.setAttribute("style","border-color:rgba(210,215,223,255);");
+        length.setAttribute("style","border-color:rgba(210,215,223,255);");
+
+
+        ad_details.value="";
+        weight.value="";
+
+        height.value="";
+        width.value="";
+        length.value="";
+
+        p.value="";
+
+
+        s.value="";
+        rs.value="";
+        i.value="";
+        pr.value="";
+        t.value="";
+
+        usertype='';
+        imgbase64='';
+        fnm='';
+        ss = 0;
+        bt = 0;
+        bid='';
+        mlist = [];
+        b64arr = [];
+        fnmarr = [];
+
+        document.getElementById("ime").innerHTML='';
+        if(id==1){
+        supp.value="";
+        des.value="";
+        note.value="";
+        l.value="";
+        g.value="";
+        btn.innerHTML="Add";
+        btn.disabled=false;
+        }
+        for(x=1;x<11;x++){
+            document.getElementById("emp"+x).hidden=true;
+        }
+        
+
+
+}
+
+function get_categories(){
+    var xhttp = new XMLHttpRequest();
+           xhttp.onreadystatechange = function() {
+           if(this.readyState == 4 && this.status == 200){
+
+                const arr= this.responseText.split(",");
+ 
+               for(x=0;x<arr.length;x++){
+                var option = document.createElement("option");
+
+                option.text = arr[x];
+                option.value = arr[x];
+                document.getElementById("category").add(option);
+               }
+
+
+        };
+           }
+
+
+
+           xhttp.open("GET", "./php/call_functions.php?x=get_categories", true);
+           xhttp.send();
+    
+}
+
+
+function alert_div(id){
+
+    if(id==1){
+        document.getElementById("alrt").innerHTML='Product successfully added!'+
+        '<span aria-hidden="true" style="float: right;cursor: pointer;" onclick="close_alert();">&times;</span>';
+        document.getElementById("alrt").setAttribute("class","alert alert-success text-center");
+        document.getElementById("alrt").hidden=false;
+
+    }
+    if(id==0){
+        document.getElementById("alrt").innerHTML='Something went wrong!'+
+        '<span aria-hidden="true" style="float: right;cursor: pointer;" onclick="close_alert();">&times;</span>';
+        document.getElementById("alrt").setAttribute("class","alert alert-danger text-center");
+        document.getElementById("alrt").hidden=false;
+    }
+    return
+}
+function close_alert(){
+        document.getElementById("alrt").hidden=true;
+        document.getElementById("alrt").innerHTML="";
+        document.getElementById("alrt").setAttribute("class","");
+        
+
+}
+
+function save(){
+    btn.innerHTML='<div class="spinner-border text-secondary" role="status"><span class="sr-only">Loading...</span></div>';
+
+    if(p.value=="" || c.value=="" || s.value=="" || rs.value=="" || pr.value=="" || t.value=="" ||
+    weight.value=="" || height.value=="" || width.value=="" || length.value==""
+    ){
+
+        if(p.value=="" ){
+            p.setAttribute("style","border-color:red;");
+            document.getElementById("emp1").hidden=false;
+        }
+        if(c.value=="" ){
+            c.setAttribute("style","border-color:red;");
+            document.getElementById("emp2").hidden=false;
+        }
+        if(s.value=="" ){
+            s.setAttribute("style","border-color:red;");
+            document.getElementById("emp3").hidden=false;
+        }
+        if(rs.value=="" ){
+            rs.setAttribute("style","border-color:red;");
+            document.getElementById("emp4").hidden=false;
+        }
+        if(pr.value=="" ){
+            pr.setAttribute("style","border-color:red;");
+            document.getElementById("emp5").hidden=false;
+        }
+        if(t.value=="" ){
+            t.setAttribute("style","border-color:red;");
+            document.getElementById("emp6").hidden=false;
+        }
+
+        if(weight.value=="" ){
+            weight.setAttribute("style","border-color:red;");
+            document.getElementById("emp7").hidden=false;
+        }
+        if(height.value=="" ){
+            height.setAttribute("style","border-color:red;");
+            document.getElementById("emp8").hidden=false;
+        }
+        if(width.value=="" ){
+            width.setAttribute("style","border-color:red;");
+            document.getElementById("emp9").hidden=false;
+        }
+        if(length.value=="" ){
+            length.setAttribute("style","border-color:red;");
+            document.getElementById("emp10").hidden=false;
+        }
+        
+    }
+    else{   
+
+        var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+
+        if(this.readyState == 4 && this.status == 200){
+            console.log(this.responseText);
+            if(Number(this.responseText)==1){
+                alert_div(1);
+            }else{
+                alert_div(0);
+                console.log(this.responseText);
+            }
+           
+        };
+        clear_mod(1);
+    }
+    var formdata = new FormData();
+
+    formdata.append("productname",p.value);
+    formdata.append("category",c.value);
+    formdata.append("location",l.value);
+    formdata.append("group",g.value);
+    formdata.append("stock",s.value);
+    formdata.append("restock",rs.value);
+    formdata.append("origprice",i.value);
+    formdata.append("charge",pr.value);
+    formdata.append("tax",tax.value);
+    formdata.append("supplier",supp.value);
+    formdata.append("description",des.value);
+    formdata.append("ad_details",ad_details.value);
+    formdata.append("note",note.value);
+
+    formdata.append("weight",weight.value);
+    formdata.append("weight_unit",weight_unit.value);
+    formdata.append("height",height.value);
+    formdata.append("width",width.value);
+    formdata.append("length",length.value);
+    formdata.append("length_unit",length_unit.value);
+
+
+
+formdata.append("mlist_json",JSON.stringify(mlist));
+formdata.append("b64arr_json",JSON.stringify(b64arr));
+formdata.append("fnmarr_json",JSON.stringify(fnmarr));
+
+
+
+    xhttp.open("POST", "./php/add_product.php", true);
+    xhttp.send(formdata);
+    }
+  
+}
+
+
+const ifile=document.getElementById("ifile");
+        const artwork=document.getElementById("artwork");
+        const img=document.querySelector('#my_image');
+        const txt=document.getElementById("txtsf");
+     
+        const img3=document.querySelector('#my_image4');
+        const img2=document.querySelector('#my_image3');
+        
+        // btncl.addEventListener('click', function(event){
+        //   img.setAttribute('src',"../images/can.png");
+        //   txt.value="";
+        //   imgbase64="";
+        //   ifile.value="";
+        // });
+function remv(x){
+    key=mlist.indexOf(x);
+    a=[];
+    b=mlist.slice(0,key);
+    c=mlist.slice(key+1);
+    mlist=a.concat(b,c);
+
+    a=[];
+    b=b64arr.slice(0,key);
+    c=b64arr.slice(key+1);
+    b64arr=a.concat(b,c);
+
+    a=[];
+    b=fnmarr.slice(0,key);
+    c=fnmarr.slice(key+1);
+    fnmarr=a.concat(b,c);
+
+    // console.log(mlist.length+"-"+b64arr.length+"-"+fnmarr.length);
+    document.getElementById(x).remove();
+}
+
+function adm(x,y){
+     bt=x;
+    bid=y;
+}
+        ifile.addEventListener('change', function(event){
+
+          const uploadedFile = document.querySelector('#ifile').files[0];
+		      toBase64(uploadedFile)
+		      .then(res => {
+             imgbase64=res;
+             savepay(res,fnm,bt,bid);
+             ifile.value="";
+	      	})
+		      .catch(err => {
+            imgbase64=err;
+            console.log(err);
+            ifile.value="";
+	    	  })
+
+        });
+
+      const toBase64 = file => new Promise((resolve, reject) => {
+	    const reader = new FileReader();
+      reader.addEventListener('load', function(){
+
+ 
+              fnm=ifile.value.match(/[\/\\]([\w\d\s\.\-\(\)]+)$/)[1];
+           
+            });
+
+	    reader.readAsDataURL(file);
+	    reader.onload = () => resolve(reader.result);
+	    reader.onerror = error => reject(error);
+	      });
+
+
+
+          var mcount=0;
+
+
+  function savepay(b64,fnm,xy,id){
+    if(xy==1){
+
+        document.getElementById(id+"img").setAttribute("src", b64);
+        document.getElementById(id+"inp").value=fnm
+        b64arr[mlist.indexOf(id)]=b64;
+        fnmarr[mlist.indexOf(id)]=fnm;
+
+    }
+    else{
+
+mcount+=1;
+
+const element = document.getElementById("ime");
+
+const tr = document.createElement("div");
+tr.setAttribute("id",mcount);
+tr.setAttribute("class","col-md-4");
+tr.setAttribute("style","padding: 10px; margin-bottom: 1%; background-image: linear-gradient(to bottom, rgb(199, 199, 199), rgb(199, 199, 199) 100%);");
+
+const td = document.createElement("img");
+td.setAttribute("id",mcount+"img");
+td.setAttribute("class", "img-fluid");
+td.setAttribute("src", b64);
+td.setAttribute("alt",fnm);
+tr.appendChild(td);
+
+const td2 = document.createElement("input");
+td2.setAttribute("id",mcount+"inp");
+td2.setAttribute("readonly","true");
+td2.setAttribute("class", "lh-base form-control");
+td2.setAttribute("type","text");
+td2.setAttribute("style","margin-top: 10px;");
+
+td2.setAttribute("value",fnm);
+tr.appendChild(td2);
+
+const tr2 = document.createElement("div");
+tr2.setAttribute("style", "margin-top: 10px;");
+tr2.setAttribute("class", "d-flex justify-content-center");
+
+const td1 = document.createElement("button");
+td1.setAttribute("id", mcount+"rmbt");
+td1.setAttribute("onclick", "remv("+mcount+");");
+td1.setAttribute("style", "margin-right: 1%;");
+td1.setAttribute("type", "button");
+td1.setAttribute("class", "btn-dark");
+const td1txt = document.createTextNode("Remove");
+td1.appendChild(td1txt);
+tr2.appendChild(td1);
+
+
+const td8 = document.createElement("button");
+td8.setAttribute("id", mcount+"brbt");
+td8.setAttribute("onclick", "adm(1,"+mcount+");ifile.click();");
+td8.setAttribute("type", "button");
+td8.setAttribute("class", "btn-dark");
+const td8txt = document.createTextNode("Browse File");
+td8.appendChild(td8txt);
+tr2.appendChild(td8);
+
+tr.appendChild(tr2);
+
+element.appendChild(tr);
+mlist.push(mcount);
+b64arr.push(b64);
+fnmarr.push(fnm);
+
+}
+
+}
+
+    </script>
+</body>
+
+</html>

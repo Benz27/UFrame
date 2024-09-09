@@ -1,0 +1,695 @@
+<?php
+session_start();
+
+include("./php/conn.php"); 
+include("./php/read.php");
+
+$user_data=check_login($alink);
+
+?>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>RBF Admin</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+
+</head>
+
+<body id="page-top">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+            <!-- Sidebar - Brand -->
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+                <!-- <div class="sidebar-brand-icon rotate-n-15">
+                    <i class="fas fa-laugh-wink"></i>
+                </div> -->
+                <div class="sidebar-brand-text mx-3">RBF Admin</div>
+            </a>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider my-0">
+
+            <!-- Nav Item - Dashboard -->
+            <li class="nav-item">
+                <a class="nav-link" href="index.html">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Dashboard</span></a>
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                Interface
+            </div>
+
+            <!-- Nav Item - Pages Collapse Menu -->
+
+            <div class="text-center d-none d-md-inline">
+                <button class="rounded-circle border-0" id="sidebarToggle"></button>
+            </div>
+
+        </ul>
+        <!-- End of Sidebar -->
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Topbar -->
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+                    <!-- Sidebar Toggle (Topbar) -->
+                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                        <i class="fa fa-bars"></i>
+                    </button>
+
+                    <!-- Topbar Search -->
+                    <!-- <form
+                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                        <div class="input-group">
+                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
+                                aria-label="Search" aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="button">
+                                    <i class="fas fa-search fa-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form> -->
+
+                    <!-- Topbar Navbar -->
+                    <ul class="navbar-nav ml-auto">
+
+                        <!-- Nav Item - Search Dropdown (Visible Only XS) -->
+
+                        <!-- <li class="nav-item dropdown no-arrow d-sm-none">
+                            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-search fa-fw"></i>
+                            </a>
+         
+                            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
+                                aria-labelledby="searchDropdown">
+                                <form class="form-inline mr-auto w-100 navbar-search">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control bg-light border-0 small"
+                                            placeholder="Search for..." aria-label="Search"
+                                            aria-describedby="basic-addon2">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-primary" type="button">
+                                                <i class="fas fa-search fa-sm"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </li> -->
+
+
+                        <div class="topbar-divider d-none d-sm-block"></div>
+
+                        <!-- Nav Item - User Information -->
+                        <li class="nav-item dropdown no-arrow">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">
+                                    <?php echo $nav_fname;?>
+                                    <?php echo $nav_lname;?>
+                                </span>
+                                <i class="fas fa-fw fa-user"></i>
+                            </a>
+                            <!-- Dropdown - User Information -->
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                aria-labelledby="userDropdown">
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Profile
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Settings
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Activity Log
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Logout
+                                </a>
+                            </div>
+                        </li>
+
+                    </ul>
+
+                </nav>
+                <!-- End of Topbar -->
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <div class="container-xl px-4 mt-4">
+                        <!-- Account page navigation-->
+                        <div class="row">
+                            <div class="col-xl-4">
+                                <!-- Profile picture card-->
+                                <!-- <div class="card mb-4 mb-xl-0">
+                                    <div class="card-header">Profile Picture</div>
+                                    <div class="card-body text-center"> -->
+                                <!-- Profile picture image-->
+                                <!-- <img class="img-account-profile rounded-circle mb-2" src="<?php echo $about_pic;?>" alt="" height="200px" id="my_img" width="200px"/> -->
+
+                                <!-- Profile picture help block-->
+                                <!-- <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div> -->
+                                <!-- Profile picture upload button-->
+                                <!-- <button class="btn btn-primary" onclick="ifile.click();" type="button">Upload new image</button>
+                                    </div>
+                                </div> -->
+                            </div>
+                            <div class="col-xl-12">
+
+                                <div class="card mb-4">
+                                    <div class="card-header">Location details</div>
+                                    <div class="card-body">
+
+                                        <div class="row gx-3 mb-3">
+
+                                            <div class="col-md-12">
+                                                <span style="color: red;">*</span>
+                                                <label class="small mb-1" for="productname">Name</label>
+                                                <input class="form-control" id="productname" type="text"
+                                                    placeholder="Enter the location name" value="" />
+                                                <small id="emp1" style="color: red;" hidden>This field cannot be
+                                                    empty!</small>
+                                            </div>
+
+                                        </div>
+
+
+
+                                        <div class="row gx-3 mb-3">
+
+                                            <div class="col-md-4">
+                                                <span style="color: red;">*</span>
+                                                <label class="small mb-1" for="street">Street</label>
+                                                <input class="form-control" id="street" type="text"
+                                                    placeholder="Enter the street" value="" />
+                                                <small id="emp2" style="color: red;" hidden>This field cannot be
+                                                    empty!</small>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <span style="color: red;">*</span>
+                                                <label class="small mb-1" for="city">City</label>
+                                                <input class="form-control" id="city" type="text"
+                                                    placeholder="Enter the city" value="" />
+                                                <small id="emp3" style="color: red;" hidden>This field cannot be
+                                                    empty!</small>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <span style="color: red;">*</span>
+                                                <label class="small mb-1" for="province">Province</label>
+                                                <input class="form-control" id="province" type="text"
+                                                    placeholder="Enter the province" value="" />
+                                                <small id="emp4" style="color: red;" hidden>This field cannot be
+                                                    empty!</small>
+                                            </div>
+
+                                        </div>
+
+
+
+
+
+
+                                        <!-- <hr>
+                                            <div class="row gx-3 mb-3">
+
+                                                <div class="col-md-4">
+                                                    <span style="color: red;">*</span>
+                                                        <label class="small mb-1" for="investment">Supplier</label>
+                                                        <input class="form-control" id="investment" type="text" placeholder="Enter the value spent" value="0"/>
+                                                        <small id="emp5" style="color: red;" hidden>This field cannot be empty!</small>
+                                                    </div>
+
+                                                <div class="col-md-4">
+                                                    <span style="color: red;">*</span>
+                                                    <label class="small mb-1" for="price">Contact No.</label>
+                                                    <input class="form-control" id="price" type="text" placeholder="Enter the value per quantity" value="0"/>
+                                                    <small id="emp6" style="color: red;" hidden>This field cannot be empty!</small>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <span style="color: red;">*</span>
+                                                    <label class="small mb-1" for="tax">Email</label>
+                                                    <input class="form-control" id="tax" type="text" placeholder="Enter tax" value="0"/>
+                                                    <small id="emp7" style="color: red;" hidden>This field cannot be empty!</small>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <span style="color: red;">*</span>
+                                                    <label class="small mb-1" for="tax">Street</label>
+                                                    <input class="form-control" id="tax" type="text" placeholder="Enter tax" value="0"/>
+                                                    <small id="emp7" style="color: red;" hidden>This field cannot be empty!</small>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <span style="color: red;">*</span>
+                                                    <label class="small mb-1" for="tax">City</label>
+                                                    <input class="form-control" id="tax" type="text" placeholder="Enter tax" value="0"/>
+                                                    <small id="emp7" style="color: red;" hidden>This field cannot be empty!</small>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <span style="color: red;">*</span>
+                                                    <label class="small mb-1" for="tax">Province</label>
+                                                    <input class="form-control" id="tax" type="text" placeholder="Enter tax" value="0"/>
+                                                    <small id="emp7" style="color: red;" hidden>This field cannot be empty!</small>
+                                                </div>
+                                            </div> -->
+
+
+
+
+
+
+
+
+                                        <div class="mb-3" hidden>
+                                            <label class="small mb-1" for="note">Notes</label>
+                                            <input class="form-control" id="note" type="text"
+                                                placeholder="Enter the notes" value="" />
+                                        </div>
+                                        <div class="mb-3" hidden>
+                                            <label class="small mb-1" for="description">Description</label>
+                                            <textarea class="form-control" id="description" cols="30" rows="5"
+                                                placeholder="Enter the description"></textarea>
+                                        </div>
+
+
+
+
+
+                                    </div>
+                                </div>
+                                <div class="card shadow mb-4 col-12" hidden>
+                                    <div class="card-header py-3">
+                                        <h6 class="m-0 font-weight-bold text-primary">Shipping Details<i
+                                                class="fa fa-plus-circle"
+                                                style="cursor: pointer;margin-left: 10px;color: gray;"></i></h6>
+
+                                    </div>
+                                    <div class="card shadow mb-4">
+                                        <div class="card-body">
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered" id="dataTable" width="100%"
+                                                    cellspacing="0">
+                                                    <thead>
+                                                        <tr>
+                                                            <!-- <th>#</th> -->
+
+                                                            <th>Radius (Km)</th>
+                                                            <th>Charge</th>
+                                                            <th>Delivery Details</th>
+                                                            <th>Delete</th>
+                                                        </tr>
+                                                    </thead>
+
+                                                    <tbody id="tbody">
+                                                        <tr>
+                                                            <!-- <th>#</th> -->
+
+                                                            <td><input type="text" id=""></input></td>
+                                                            <td><input type="text" id=""></input></td>
+                                                            <td><textarea id="" cols="40" rows="3"></textarea></td>
+                                                            <td><i class="fa fa-trash"
+                                                                    style="cursor: pointer;color: gray;"></i></td>
+                                                        </tr>
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+
+
+
+
+
+                                <div class="card mb-4">
+                                    <div class="card-header">Set details for pickup orders</div>
+                                    <div class="card-body">
+                                        <div class="row gx-3 mb-3">
+
+                                            <div class="col-md-4">
+                                                <span style="color: red;">*</span>
+                                                <label class="small mb-1" for="street">Street</label>
+                                                <input class="form-control" id="street" type="text"
+                                                    placeholder="Enter the street" value="" />
+                                                <small id="emp2" style="color: red;" hidden>This field cannot be
+                                                    empty!</small>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <span style="color: red;">*</span>
+                                                <label class="small mb-1" for="city">City</label>
+                                                <input class="form-control" id="city" type="text"
+                                                    placeholder="Enter the city" value="" />
+                                                <small id="emp3" style="color: red;" hidden>This field cannot be
+                                                    empty!</small>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <span style="color: red;">*</span>
+                                                <label class="small mb-1" for="province">Province</label>
+                                                <input class="form-control" id="province" type="text"
+                                                    placeholder="Enter the province" value="" />
+                                                <small id="emp4" style="color: red;" hidden>This field cannot be
+                                                    empty!</small>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="" id="alrt" role="alert" hidden>
+
+
+                                </div>
+                                <button class="btn btn-primary" id="btn" type="button" onclick="save();">Add</button>
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- Body -->
+
+                </div>
+                <!-- /.container-fluid -->
+
+            </div>
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; RBF Admin 2022</span>
+                    </div>
+                </div>
+            </footer>
+            <!-- End of Footer -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">x</span>
+                    </button>
+                </div>
+                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-primary" href="login.html">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="js/sb-admin-2.min.js"></script>
+
+
+    <script>
+
+
+        var p = document.getElementById("productname");
+        var c = document.getElementById("category");
+        var l = document.getElementById("location");
+        var g = document.getElementById("group");
+        var s = document.getElementById("stock");
+        var rs = document.getElementById("restock");
+        var i = document.getElementById("origprice");
+        var pr = document.getElementById("charge");
+        var t = document.getElementById("tax");
+        var supp = document.getElementById("supplier");
+        var des = document.getElementById("description");
+        var note = document.getElementById("note");
+        var btn = document.getElementById("btn");
+        var supplist = document.getElementById("supplierlist");
+        get_categories();
+        function clear_mod(id) {
+            p.setAttribute("style", "border-color:rgba(210,215,223,255);");
+            c.setAttribute("style", "border-color:rgba(210,215,223,255);");
+
+            s.setAttribute("style", "border-color:rgba(210,215,223,255);");
+            rs.setAttribute("style", "border-color:rgba(210,215,223,255);");
+            i.setAttribute("style", "border-color:rgba(210,215,223,255);");
+            pr.setAttribute("style", "border-color:rgba(210,215,223,255);");
+            t.setAttribute("style", "border-color:rgba(210,215,223,255);");
+
+            p.value = "";
+            c.value = "";
+
+            s.value = "";
+            rs.value = "";
+            i.value = "";
+            pr.value = "";
+            t.value = "";
+
+
+            if (id == 1) {
+                supp.value = "";
+                des.value = "";
+                note.value = "";
+                l.value = "";
+                g.value = "";
+                btn.innerHTML = "Add";
+                btn.disabled = false;
+            }
+            for (x = 1; x < 7; x++) {
+                document.getElementById("emp" + x).hidden = true;
+            }
+
+
+
+        }
+
+        function get_categories() {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+
+                    const arr = this.responseText.split(",");
+
+                    for (x = 0; x < arr.length; x++) {
+                        var option = document.createElement("option");
+
+                        option.text = arr[x];
+                        option.value = arr[x];
+                        document.getElementById("category").add(option);
+                    }
+
+
+                };
+            }
+
+
+
+            xhttp.open("GET", "./php/call_functions.php?x=get_categories", true);
+            xhttp.send();
+
+        }
+
+
+        function alert_div(id) {
+
+            if (id == 1) {
+                document.getElementById("alrt").innerHTML = 'Product successfully added!' +
+                    '<span aria-hidden="true" style="float: right;cursor: pointer;" onclick="close_alert();">&times;</span>';
+                document.getElementById("alrt").setAttribute("class", "alert alert-success text-center");
+                document.getElementById("alrt").hidden = false;
+
+            }
+            if (id == 0) {
+                document.getElementById("alrt").innerHTML = 'Something went wrong!' +
+                    '<span aria-hidden="true" style="float: right;cursor: pointer;" onclick="close_alert();">&times;</span>';
+                document.getElementById("alrt").setAttribute("class", "alert alert-danger text-center");
+                document.getElementById("alrt").hidden = false;
+            }
+            return
+        }
+        function close_alert() {
+            document.getElementById("alrt").hidden = true;
+            document.getElementById("alrt").innerHTML = "";
+            document.getElementById("alrt").setAttribute("class", "");
+
+
+        }
+
+        function save() {
+            btn.innerHTML = '<div class="spinner-border text-secondary" role="status"><span class="sr-only">Loading...</span></div>';
+
+            if (p.value == "" || c.value == "" || s.value == "" || rs.value == "" || pr.value == "" || t.value == ""
+            ) {
+
+                if (p.value == "") {
+                    p.setAttribute("style", "border-color:red;");
+                    document.getElementById("emp1").hidden = false;
+                }
+                if (c.value == "") {
+                    c.setAttribute("style", "border-color:red;");
+                    document.getElementById("emp2").hidden = false;
+                }
+                if (s.value == "") {
+                    s.setAttribute("style", "border-color:red;");
+                    document.getElementById("emp3").hidden = false;
+                }
+                if (rs.value == "") {
+                    rs.setAttribute("style", "border-color:red;");
+                    document.getElementById("emp4").hidden = false;
+                }
+                if (pr.value == "") {
+                    pr.setAttribute("style", "border-color:red;");
+                    document.getElementById("emp5").hidden = false;
+                }
+                if (t.value == "") {
+                    t.setAttribute("style", "border-color:red;");
+                    document.getElementById("emp6").hidden = false;
+                }
+
+            }
+            else {
+
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function () {
+
+                    if (this.readyState == 4 && this.status == 200) {
+                        if (Number(this.responseText) == 1) {
+                            alert_div(1);
+                        } else {
+                            alert_div(0);
+                            console.log(this.responseText);
+                        }
+
+                    };
+                    clear_mod(1);
+                }
+                var formdata = new FormData();
+
+                formdata.append("productname", p.value);
+                formdata.append("category", c.value);
+                formdata.append("location", l.value);
+                formdata.append("group", g.value);
+                formdata.append("stock", s.value);
+                formdata.append("restock", rs.value);
+                formdata.append("origprice", i.value);
+                formdata.append("charge", pr.value);
+                formdata.append("tax", tax.value);
+                formdata.append("supplier", supp.value);
+                formdata.append("description", des.value);
+                formdata.append("note", note.value);
+                xhttp.open("POST", "./php/add_product.php", true);
+                xhttp.send(formdata);
+            }
+
+        }
+
+        // location table
+        function table_content(id) {
+
+            const element = document.getElementById("table");
+            element.innerHTML = '';
+            const table = document.createElement("table");
+            table.setAttribute("class", "table table-bordered");
+            table.setAttribute("id", "dataTable");
+            table.setAttribute("width", "100%");
+            table.setAttribute("cellspacing", "0");
+            const thead = document.createElement("thead");
+
+
+            //start
+            const tr = document.createElement("tr");
+            //ths
+            const th1 = document.createElement("th");
+            const th1txt = document.createTextNode("Item ID");
+            th1.appendChild(th1txt);
+            const th2 = document.createElement("th");
+            const th2txt = document.createTextNode("Name");
+            th2.appendChild(th2txt);
+            const th3 = document.createElement("th");
+            const th3txt = document.createTextNode("Stock Level");
+            th3.appendChild(th3txt);
+            const th4 = document.createElement("th");
+            const th4txt = document.createTextNode("New Stock");
+            th4.appendChild(th4txt);
+            //append ths
+            tr.appendChild(th1);
+            tr.appendChild(th2);
+            tr.appendChild(th3);
+            tr.appendChild(th4);
+
+            //end
+
+
+            thead.appendChild(tr);
+            const tbody = document.createElement("tbody");
+            tbody.setAttribute("id", "tbody");
+            table.appendChild(thead);
+            table.appendChild(tbody);
+            element.appendChild(table);
+
+
+        }
+
+
+
+
+    </script>
+</body>
+
+</html>

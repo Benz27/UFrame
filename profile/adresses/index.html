@@ -1,0 +1,615 @@
+<?php
+session_start();
+//unset($_SESSION['user_id']);
+include("../../php/conn.php");
+include("../../php/read.php");
+include("../../php/cart.php");
+include("../../php/address.php");
+include("../../php/about.php");
+$user_data=check_login($link);
+
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <!--  This file has been downloaded from bootdey.com @bootdey on twitter -->
+    <!--  All snippets are MIT license http://bootdey.com/license -->
+    <title><?php echo $abt_name;?> - Manage Addresses</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+ 
+</head>
+<body>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css" integrity="sha256-2XFplPlrFClt0bIdPgpz8H7ojnk10H69xRqd9+uTShA=" crossorigin="anonymous" />
+
+<div class="container-xl px-4 mt-4">
+    <!-- Account page navigation-->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container px-4 px-lg-5">
+            <a class="nav-link" href="../../" style="font-family: Myriad;font-weight: bolder;color: black;font-size: 30px;"><?php echo $abt_name;?></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                    <!-- <li class="nav-item"><a class="nav-link" href="./login/">Log in</a></li> -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../aboutus/">About</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown" id="category">
+                            <li><a class="dropdown-item" href="../../">All Products</a></li>
+                            <li><hr class="dropdown-divider" /></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                       <a class="nav-link active" id="shp" role="button" aria-current="page" href="./">Profile</a>
+                    </li>
+                </ul>
+                <a href="../../cart/">
+                    <button class="btn btn-outline-dark" type="button">
+                        <i class="bi-cart-fill me-1"></i>
+                        Cart
+                        <span class="badge bg-dark text-white ms-1 rounded-pill" id="crtnum"><?php echo count($s_cart);?></span>
+                    </button>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <nav class="nav nav-borders">
+        <a class="nav-link ms-0" href="../info/">Profile</a>
+        <a class="nav-link" href="../security/">Security</a>
+        <a class="nav-link active" href="./">Addresses</a>
+        <a class="nav-link" href="../orders/">Purchases</a>
+    </nav>
+    <hr class="mt-0 mb-4">
+    <!-- Payment methods card-->
+    <div class="card card-header-actions mb-4">
+        <div class="card-header">
+            Addresses
+            <button class="btn btn-sm btn-primary" type="button"  data-toggle="modal" data-target="#modal" onclick="add_btn();">Add Address</button>
+        </div>
+        <div class="card-body px-0" id="tbody">
+            <!-- Payment method 1-->
+            <?php
+
+            addr_list();
+
+            ?>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="mdtitle"></h5>
+           
+            <span aria-hidden="true" data-dismiss="modal" style="cursor: pointer;" id="mdclose">&times;</span>
+
+        </div>
+        
+        <div id="ld">
+            <div class="modal-body" id="mdbody">
+                <div class="alert alert-danger text-center" role="alert" id="alrt" hidden>
+                    Something went wrong!
+                  </div>
+                <div class="form-group">
+                    <label for="recipient-name" class="col-form-label">Street:</label>
+                    <input type="text" class="form-control" id="street">
+                    <small id="emp1" style="color: red;" hidden>This field cannot be empty!</small>
+                  </div>
+                  <div class="form-group">
+                    <label for="message-text" class="col-form-label">City:</label>
+                    <input type="text" class="form-control" id="city">
+                    <small id="emp2" style="color: red;" hidden>This field cannot be empty!</small>
+                  </div>
+                  <div class="form-group">
+                    <label for="message-text" class="col-form-label">Province:</label>
+                    <input type="text" class="form-control" id="prov">
+                    <small id="emp3" style="color: red;" hidden>This field cannot be empty!</small>
+                  </div>
+                  <div class="form-group" hidden>
+                    <label for="message-text" class="col-form-label">Email:</label>
+                    <input type="text" class="form-control" id="email">
+
+                  </div>
+                  <div class="form-group">
+                    <label for="message-text" class="col-form-label">Phone:</label>
+                    <input type="text" class="form-control" id="phone">
+                    <small id="emp4" style="color: red;" hidden>This field cannot be empty!</small>
+                  </div>
+            </div>
+            <div class="modal-footer" id="mdfooter">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" id="btnsave">Save</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="mdno">Cancel</button>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>    
+
+  <div class="modal fade" id="del_modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Delete Address</h5>
+            <span aria-hidden="true" data-dismiss="modal" style="cursor: pointer;">&times;</span>
+        </div>
+        <div id="dld">
+            <div class="modal-body" id="dbody">
+                <p>Are you sure you want to delete this address?</p>
+            </div>
+            <div class="modal-footer" id="dfooter">
+                <button type="button" class="btn btn-danger" id="dyes">Yes</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="dno">No</button>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<style type="text/css">
+body{margin-top:20px;
+background-color:#f2f6fc;
+color:#69707a;
+}
+.img-account-profile {
+    height: 10rem;
+}
+.rounded-circle {
+    border-radius: 50% !important;
+}
+.card {
+    box-shadow: 0 0.15rem 1.75rem 0 rgb(33 40 50 / 15%);
+}
+.card .card-header {
+    font-weight: 500;
+}
+.card-header:first-child {
+    border-radius: 0.35rem 0.35rem 0 0;
+}
+.card-header {
+    padding: 1rem 1.35rem;
+    margin-bottom: 0;
+    background-color: rgba(33, 40, 50, 0.03);
+    border-bottom: 1px solid rgba(33, 40, 50, 0.125);
+}
+.form-control, .dataTable-input {
+    display: block;
+    width: 100%;
+    padding: 0.875rem 1.125rem;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1;
+    color: #69707a;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #c5ccd6;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: 0.35rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.nav-borders .nav-link.active {
+    color: #0061f2;
+    border-bottom-color: #0061f2;
+}
+.nav-borders .nav-link {
+    color: #69707a;
+    border-bottom-width: 0.125rem;
+    border-bottom-style: solid;
+    border-bottom-color: transparent;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: 1rem;
+    margin-right: 1rem;
+}
+.fa-2x {
+    font-size: 2em;
+}
+
+.table-billing-history th, .table-billing-history td {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    padding-left: 1.375rem;
+    padding-right: 1.375rem;
+}
+.table > :not(caption) > * > *, .dataTable-table > :not(caption) > * > * {
+    padding: 0.75rem 0.75rem;
+    background-color: var(--bs-table-bg);
+    border-bottom-width: 1px;
+    box-shadow: inset 0 0 0 9999px var(--bs-table-accent-bg);
+}
+
+.border-start-primary {
+    border-left-color: #0061f2 !important;
+}
+.border-start-secondary {
+    border-left-color: #6900c7 !important;
+}
+.border-start-success {
+    border-left-color: #00ac69 !important;
+}
+.border-start-lg {
+    border-left-width: 0.25rem !important;
+}
+.h-100 {
+    height: 100% !important;
+}
+</style>
+
+<script type="text/javascript">
+
+
+get_categories();
+
+function get_categories(){
+    var xhttp = new XMLHttpRequest();
+           xhttp.onreadystatechange = function() {
+           if(this.readyState == 4 && this.status == 200){
+            const arr= this.responseText.split(",");
+
+            const element = document.getElementById("category");
+               for(x=0;x<arr.length;x++){
+                const li = document.createElement("li");
+                const a = document.createElement("a");
+                const atxt = document.createTextNode(arr[x]);
+                a.setAttribute("class","dropdown-item");
+                a.appendChild(atxt);
+                a.href="../../?s="+arr[x];
+                li.appendChild(a);
+                element.appendChild(li);
+               }
+
+
+        };
+           }
+
+
+
+           xhttp.open("GET", "../../php/call_functions.php?x=get_categories", true);
+           xhttp.send();
+    
+}
+
+
+var modal = document.getElementById("modal");
+function add_btn(){
+    document.getElementById("btnsave").setAttribute("onclick","addr_add();");
+    document.getElementById("mdtitle").innerHTML="Add Address";
+    clear_mod(0);
+}
+function edt_btn(id){
+    clear_mod(0);
+    document.getElementById("btnsave").setAttribute("onclick","addr_edt("+id+");");
+    document.getElementById("mdtitle").innerHTML="Edit Address";
+    document.getElementById("street").value=document.getElementById(id+"s").value;
+    document.getElementById("city").value=document.getElementById(id+"c").value;
+    document.getElementById("prov").value=document.getElementById(id+"p").value;
+    // document.getElementById("email").value=document.getElementById(id+"e").value;
+    document.getElementById("phone").value=document.getElementById(id+"ph").value;
+}
+function del_btn(id){
+    document.getElementById("dyes").setAttribute("onclick","addr_del("+id+");");
+
+}
+function clear_mod(x){
+        document.getElementById("street").setAttribute("style","border-color:rgba(210,215,223,255);");
+        document.getElementById("city").setAttribute("style","border-color:rgba(210,215,223,255);");
+        document.getElementById("prov").setAttribute("style","border-color:rgba(210,215,223,255);");
+        // document.getElementById("email").setAttribute("style","border-color:rgba(210,215,223,255);");
+        document.getElementById("phone").setAttribute("style","border-color:rgba(210,215,223,255);");
+        document.getElementById("emp1").hidden=true;
+        document.getElementById("emp2").hidden=true;
+        document.getElementById("emp3").hidden=true;
+        document.getElementById("emp4").hidden=true;
+        // document.getElementById("emp5").hidden=true;
+        document.getElementById("alrt").hidden=true;
+                document.getElementById("btnsave").disabled=false;
+                document.getElementById("mdno").disabled=false;
+                document.getElementById("btnsave").innerHTML='Save';
+                if(x==0){
+                    document.getElementById("street").value="";
+                    document.getElementById("city").value="";
+                    document.getElementById("prov").value=""; 
+                    document.getElementById("email").value="";
+                    document.getElementById("phone").value="";
+                }
+}
+
+
+function addr_add(){
+   var s = document.getElementById("street").value;
+   var c = document.getElementById("city").value;
+   var p = document.getElementById("prov").value;
+//    var e = document.getElementById("email").value;
+   var ph = document.getElementById("phone").value;
+    clear_mod(1);
+    if(document.getElementById("street").value=="" || document.getElementById("city").value=="" || document.getElementById("prov").value==""
+     || document.getElementById("phone").value==""
+    ){
+        if(document.getElementById("street").value=="" ){
+            document.getElementById("street").setAttribute("style","border-color:red;");
+            document.getElementById("emp1").hidden=false;
+        }
+        if(document.getElementById("city").value=="" ){
+            document.getElementById("city").setAttribute("style","border-color:red;");
+            document.getElementById("emp2").hidden=false;
+        }
+        if(document.getElementById("prov").value=="" ){
+            document.getElementById("prov").setAttribute("style","border-color:red;");
+            document.getElementById("emp3").hidden=false;
+        }
+
+        if(document.getElementById("phone").value=="" ){
+            document.getElementById("phone").setAttribute("style","border-color:red;");
+            document.getElementById("emp4").hidden=false;
+        }
+    }else{   
+
+
+    document.getElementById("btnsave").disabled=true;
+    document.getElementById("mdno").disabled=true;
+    document.getElementById("btnsave").innerHTML='<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>   Saving...';
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+
+        if(this.readyState == 4 && this.status == 200){
+            console.log(this.responseText);
+            const z=this.responseText;
+
+            if(!isNaN(z)){
+                const y= String(z).split(".");
+                crt_addr(Number(y[0]),s,c,p,ph,Number(y[1]));
+                $('#modal').modal('hide');
+            }else{
+                document.getElementById("alrt").hidden=false;
+            }
+            document.getElementById("street").value="";
+            document.getElementById("city").value="";
+            document.getElementById("prov").value="";
+            // document.getElementById("email").value="";
+            document.getElementById("phone").value="";
+                document.getElementById("btnsave").disabled=false;
+                document.getElementById("mdno").disabled=false;
+                document.getElementById("btnsave").innerHTML='Save';
+        };
+
+    }
+    var formdata = new FormData();
+
+    formdata.append("street",document.getElementById("street").value);
+    formdata.append("city",document.getElementById("city").value);
+    formdata.append("prov",document.getElementById("prov").value);
+    formdata.append("email",document.getElementById("email").value);
+    formdata.append("phone",document.getElementById("phone").value);
+    formdata.append("sel",0);
+    xhttp.open("POST", "../../php/call_functions.php?x=addr_add", true);
+    xhttp.send(formdata);
+    }
+
+}
+
+function crt_addr(id,s,c,p,ph,ind){
+
+const element = document.getElementById("tbody");
+
+var cont2 ="";
+var cont3 ="";
+var cont1 =
+'<div class="d-flex align-items-center justify-content-between px-4" id="'+id+'">'+
+        '<div class="d-flex align-items-center">'+
+            
+            '<div class="ms-4">'+
+                '<div class="strong" id="'+id+'addr">'+s+', '+c+', '+p+'</div>'+
+                '<div class="small text-muted" id="'+id+'addr2" hidden></div>'+
+                '<div class="small text-muted" id="'+id+'addr3">'+ph+'</div>'+
+            '</div>'+
+            '<input type="text" id="'+id+'s" value="'+s+'" hidden>'+
+            '<input type="text" id="'+id+'c" value="'+c+'" hidden>'+
+            '<input type="text" id="'+id+'p" value="'+p+'" hidden>'+
+            '<input type="text" id="'+id+'e" value="" hidden>'+
+            '<input type="text" id="'+id+'ph" value="'+ph+'" hidden>'+
+        '</div>'+
+        '<div class="ms-4 small" id="'+id+'def_div">';
+
+        if(ind == 2){
+            cont2= '<div class="badge bg-light text-dark me-3" id="'+id+'def">Default</div>';
+        }else{
+            cont2= '<a class="text-muted me-3" style="cursor:pointer;" onclick="swtch_def('+id+')" id="'+id+'def">Make Default</a>';
+        }
+            
+        
+        cont3 = '<a style="cursor:pointer;" data-toggle="modal" data-target="#modal" onclick="edt_btn('+id+')">Edit</a>'+
+        '<i class="fa fa-trash ms-2" style="cursor: pointer;" onclick="del_btn('+id+')" data-toggle="modal" data-target="#modal"></i>'+
+        '</div>'+
+    '</div>'+
+    '<hr>';
+    const content=cont1+cont2+cont3;
+    element.innerHTML+=content;
+ 
+}
+
+function addr_edt(id){
+
+    var s = document.getElementById("street").value;
+   var c = document.getElementById("city").value;
+   var p = document.getElementById("prov").value;
+//    var e = document.getElementById("email").value;
+   var ph = document.getElementById("phone").value;
+
+    if(document.getElementById("street").value=="" || document.getElementById("city").value=="" || document.getElementById("prov").value==""
+     || document.getElementById("phone").value==""
+    ){
+        if(document.getElementById("street").value=="" ){
+            document.getElementById("street").setAttribute("style","border-color:red;");
+            document.getElementById("emp1").hidden=false;
+        }
+        if(document.getElementById("city").value=="" ){
+            document.getElementById("city").setAttribute("style","border-color:red;");
+            document.getElementById("emp2").hidden=false;
+        }
+        if(document.getElementById("prov").value=="" ){
+            document.getElementById("prov").setAttribute("style","border-color:red;");
+            document.getElementById("emp3").hidden=false;
+        }
+
+        if(document.getElementById("phone").value=="" ){
+            document.getElementById("phone").setAttribute("style","border-color:red;");
+            document.getElementById("emp4").hidden=false;
+        }
+    }else{   
+
+
+    document.getElementById("btnsave").disabled=true;
+    document.getElementById("mdno").disabled=true;
+    document.getElementById("btnsave").innerHTML='<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>   Saving...';
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+
+        if(this.readyState == 4 && this.status == 200){
+            console.log(this.responseText);
+            const z=this.responseText;
+
+            if(!isNaN(z)){
+               
+                $('#modal').modal('hide');
+                document.getElementById(id+"addr").innerHTML=s+', '+c+', '+p;
+                // document.getElementById(id+"addr2").innerHTML=e;
+                document.getElementById(id+"addr3").innerHTML=ph;
+                document.getElementById(id+"s").value=s;
+                document.getElementById(id+"c").value=c;
+                document.getElementById(id+"p").value=p;
+                // document.getElementById(id+"e").value=e;
+                document.getElementById(id+"ph").value=ph;
+            }else{
+                document.getElementById("alrt").hidden=false;
+            }
+            document.getElementById("street").value="";
+            document.getElementById("city").value="";
+            document.getElementById("prov").value="";
+            // document.getElementById("email").value="";
+            document.getElementById("phone").value="";
+       
+                document.getElementById("btnsave").disabled=false;
+                document.getElementById("mdno").disabled=false;
+                document.getElementById("btnsave").innerHTML='Save';
+        };
+
+    }
+    var formdata = new FormData();
+
+    formdata.append("street",document.getElementById("street").value);
+    formdata.append("city",document.getElementById("city").value);
+    formdata.append("prov",document.getElementById("prov").value);
+    formdata.append("email",document.getElementById("email").value);
+    formdata.append("phone",document.getElementById("phone").value);
+    formdata.append("id",id);
+    
+    xhttp.open("POST", "../../php/call_functions.php?x=addr_edt", true);
+    xhttp.send(formdata);
+    }
+
+}
+
+function addr_del(id){
+
+ document.getElementById("dyes").disabled=true;
+ document.getElementById("dno").disabled=true;
+ document.getElementById("dyes").innerHTML='<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>   Deleting...';
+ var xhttp = new XMLHttpRequest();
+ xhttp.onreadystatechange = function() {
+
+     if(this.readyState == 4 && this.status == 200){
+         console.log(this.responseText);
+         const z=this.responseText;
+
+         if(!isNaN(z)){
+            $('#del_modal').modal('hide');
+             document.getElementById("dno").click();
+             document.getElementById(id).remove();
+             document.getElementById(id+"hr").remove();
+             if(z>1){
+                const element = document.getElementById(z+"def_div").children[0];
+                const newNode = document.createElement("div");
+                newNode.setAttribute("class","badge bg-light text-dark me-3");
+                newNode.setAttribute("id",''+z+'def');
+                const newNodeText = document.createTextNode("Default");
+                newNode.appendChild(newNodeText);
+                element.replaceChild(newNode, element.childNodes[0]);
+             }
+         }
+         
+             document.getElementById("dyes").disabled=false;
+             document.getElementById("dno").disabled=false;
+             document.getElementById("dyes").innerHTML='Yes';
+     };
+
+ }
+ var formdata = new FormData();
+ formdata.append("id",id);
+ 
+ xhttp.open("POST", "../../php/call_functions.php?x=addr_rem", true);
+ xhttp.send(formdata);
+ 
+
+}
+
+function swtch_def(id){
+    console.log("targ",id);
+document.getElementById(id+"def").disabled=true;
+document.getElementById(id+"def").innerHTML='<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
+var xhttp = new XMLHttpRequest();
+xhttp.onreadystatechange = function() {
+
+    if(this.readyState == 4 && this.status == 200){
+        console.log("old",this.responseText);
+        console.log("new",id);
+        const z=this.responseText;
+
+        if(!isNaN(z)){
+               const element = document.getElementById(id+"def_div").children[0];
+               const newNode = document.createElement("div");
+               newNode.setAttribute("class","badge bg-light text-dark me-3");
+               newNode.setAttribute("id",''+id+'def');
+               const newNodeText = document.createTextNode("Default");
+               newNode.appendChild(newNodeText);
+               element.replaceChild(newNode, element.childNodes[0]);
+
+               const element2 = document.getElementById(z+"def_div").children[0];
+               const newNode2 = document.createElement("a");
+               newNode2.setAttribute("class","text-muted me-3");
+               newNode2.setAttribute("style","cursor:pointer;");
+               newNode2.setAttribute("onclick","swtch_def("+z+")");
+               newNode2.setAttribute("id",''+z+'def');
+               const newNodeText2 = document.createTextNode("Make Default");
+               newNode2.appendChild(newNodeText2);
+               element2.replaceChild(newNode2, element2.childNodes[0]);
+        }
+           
+            // document.getElementById(id+"def").disabled=false;
+    };
+
+}
+var formdata = new FormData();
+formdata.append("id",id);
+
+xhttp.open("POST", "../../php/call_functions.php?x=swtch_def", true);
+xhttp.send(formdata);
+
+
+}
+
+</script>
+</body>
+</html>

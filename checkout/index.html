@@ -1,0 +1,563 @@
+<?php
+session_start();
+
+include("../php/conn.php");
+include("../php/read.php");
+include("../php/cart.php");
+include("../php/checkout.php");
+
+$user_data=check_login($link);
+
+$shprng=explode("|",get_min_max_rates($link));
+$tshp="";
+$itms=explode(" ",$_GET['items']);
+$min=0;
+$max=0;
+for($x=0;$x<count($itms);$x++){
+    $z=$itms[$x];
+
+    $y=$shprng[0];
+    $min+=get_rate($link,$z, $y);
+
+    $y=$shprng[1];
+    $max+=get_rate($link,$z, $y);
+
+}
+if($min==$max){
+    $tshp="(Estimated shipping fee: ₱$min)";
+
+}else{
+    $tshp="(Estimated shipping fee: ₱$min - ₱$max)";
+}
+
+
+
+
+
+
+
+?>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout</title>
+    <link href="checkout.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+
+
+</head>
+
+<body>
+    <div class=" container-fluid my-5 ">
+        <div class="row justify-content-center ">
+            <div class="col-xl-10">
+                <div class="card shadow-lg ">
+                    <div class="row p-2 mt-3 justify-content-between mx-sm-2">
+                        <!-- <div class="col">
+                            <p class="text-muted space mb-0 shop">Shop No.78618K</p>
+                            <p class="text-muted space mb-0 shop">Store Locator</p>
+                        </div> -->
+                        <!-- <div class="col">
+                            <div class="row justify-content-start ">
+                                <div class="col"> <img class="irc_mi img-fluid cursor-pointer " src="https://i.imgur.com/jFQo2lD.png" width="70" height="70"> </div>
+                            </div>
+                        </div> -->
+                        <!-- <div class="col-auto"> <img class="irc_mi img-fluid bell" src="https://i.imgur.com/uSHMClk.jpg" width="30" height="30"> </div> -->
+                    </div>
+                    <div class="row mx-auto justify-content-center text-center">
+                        <div class="col-12 mt-3 ">
+                            <nav aria-label="breadcrumb" class="second ">
+                                <ol class="breadcrumb indigo lighten-6 first ">
+                                    <li class="breadcrumb-item font-weight-bold"><a class="black-text text-uppercase "
+                                            href="../"><span class="mr-md-3 mr-1">BACK TO SHOP</span></a><i
+                                            class="fa fa-angle-double-right " aria-hidden="true"></i></li>
+                                    <li class="breadcrumb-item font-weight-bold"><a class="black-text text-uppercase"
+                                            href="../cart/"><span class="mr-md-3 mr-1">SHOPPING BAG</span></a><i
+                                            class="fa fa-angle-double-right text-uppercase " aria-hidden="true"></i>
+                                    </li>
+                                    <li class="breadcrumb-item font-weight-bold"><a
+                                            class="black-text text-uppercase active-2" href="../checkout/"><span
+                                                class="mr-md-3 mr-1">CHECKOUT</span></a></li>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                    <div class="row justify-content-around">
+                        <div class="col-md-5">
+                            <div class="card border-0">
+                                <div class="card-header pb-0">
+                                    <h2 class="card-title space ">Checkout</h2>
+                                    <p class="card-text text-muted mt-4 space">SHIPPING DETAILS</p>
+                                    <hr class="my-0">
+                                </div>
+
+                                <div class="card-body">
+                                    <form action="" method="post" id="form">
+
+                                        <?php 
+                                        if(isset($_SESSION['user_id'])){
+                                            user();
+                                        }else{
+                                            guest();
+                                        }
+
+            
+                                    ?>
+                                        <hr class="my-0 mt-3">
+                                        <div class="form-group mt-2"> <input type="radio" name="rad" id="rad2"
+                                                onclick="ship(0)" checked><span class="small mb-1 ms-1">Cash on Delivery
+                                                <?php echo $tshp;?>
+                                            </span></div>
+                                        <!-- <input type="text" name="shpp" value="0" id="shpp" hidden> -->
+                                        <hr class="mt-0 mt-2">
+
+                                        <div class="col-lg-12">
+
+
+                                            <div class="bg-light rounded-pill px-4 mt-3 text-uppercase small">
+                                                Instructions for seller</div>
+                                            <div class="p-4">
+                                                <p class="font-italic mb-4">If you have some information for the seller
+                                                    you can leave them in the box below</p>
+                                                <textarea name="note" cols="30" rows="4" class="form-control"
+                                                    placeholder="Leave your message here..."></textarea>
+                                            </div>
+                                        </div>
+
+                                        <!-- <div class="row no-gutters">
+                                        <div class="col-sm-6 pr-sm-2">
+                                            <div class="form-group"> <label for="NAME" class="small text-muted mb-1">VALID THROUGH</label> <input type="text" class="form-control form-control-sm" name="NAME" id="NAME" aria-describedby="helpId" placeholder="06/21"> </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group"> <label for="NAME" class="small text-muted mb-1">CVC CODE</label> <input type="text" class="form-control form-control-sm" name="NAME" id="NAME" aria-describedby="helpId" placeholder="183"> </div>
+                                        </div>
+                                    </div> -->
+                                        <div class="row mb-md-5">
+                                            <div class="col"> <button type="submit" name="" id=""
+                                                    class="col-12 btn btn-lg btn-block btn-primary mt-3">PURCHASE</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="card border-0 ">
+                                <div class="card-header card-2">
+                                    <p class="card-text text-muted mt-md-4 space">YOUR ORDER </p>
+                                    <!-- <hr class="my-2"> -->
+
+                                </div>
+                                <div class="card-header mb-2">
+                                    <div class="row justify-content-between">
+                                        <div class="col-auto col-md-5">
+                                            <p class="card-text text-muted space">Item</p>
+                                        </div>
+                                        <div class="pl-0 flex-sm-col col-auto my-auto ">
+                                            <p class="card-text text-muted space">Unit Price</p>
+                                        </div>
+                                        <div class="pl-0 flex-sm-col col-auto my-auto">
+                                            <p class="card-text text-muted space">Quantity</p>
+                                        </div>
+                                        <div class="pl-0 flex-sm-col col-auto my-auto ">
+                                            <p class="card-text text-muted space">Subtotal</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body pt-0">
+                                    <?php
+                                $totprice=0;
+                                
+                                for($z=0;$z<count($itms);$z++){
+                                    
+                                    $sql = "SELECT * FROM inventory where item_id=$itms[$z]";  
+                          
+              
+                                    if($result = mysqli_query($link, $sql)){
+                                      if(mysqli_num_rows($result) > 0){ 
+
+                                        $row=mysqli_fetch_assoc($result); 
+                                        $k;
+                                        $a=false;
+                                        $stock=$row['quantity'];
+                                        $inh="Add to cart";
+                                        
+                                        $id=$row['item_id'];
+                                        foreach (array_keys($s_cart, $row['item_id']) as $key) {
+                                            $k=$key;
+                                        }
+            
+                                        $pqnt=$s_qnt[$k];
+            
+                                        $price=$row['selling_price']*$pqnt;
+            
+                                        
+                                        $totprice+=$price;
+                                        $med=explode("|",$row['media']);
+                                        $catg=$row['category']; 
+
+                                        $v_id=$row['v_id'];
+                                        $name=$row['name'];
+                                        $src='../images/products/'.$row['item_id'];
+                                        if($v_id>0){
+                                          $src='../images/vproducts/'.$row['v_id'];
+                                          $name=$row['name'].'<span class="text-secondary"> - '.$row['v_name'].'</span>';
+                                        }
+
+
+
+                                        echo '
+                                            <div class="row justify-content-between">
+                                                <div class="col-auto col-md-5">
+                                                    <div class="media flex-column flex-sm-row"> <img class="" src="'.$src.'/'.$med[0] .'" width="62" height="62">
+                                                        <div class="media-body my-auto">
+                                                            <div class="row ">
+                                                                <div class="col-auto">
+                                                                    <p class="mb-0"><b>'.$name.'</b></p><small class="text-muted">Category: '.$catg.'</small>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="pl-0 flex-sm-col col-auto my-auto ">
+                                                    <p><b>₱'.$row['selling_price'].'</b></p>
+                                                </div>
+                                                <div class="pl-0 flex-sm-col col-auto my-auto">
+                                                    <p class="boxed">'.$pqnt.'</p>
+                                                </div>
+                                                <div class="pl-0 flex-sm-col col-auto my-auto ">
+                                                    <p><b>₱'.$price.'</b></p>
+                                                </div>
+                                            </div>
+                                            <hr class="my-2">';
+
+
+
+                                      }
+                                    }
+                                }
+
+
+                                    echo '<div class="row ">
+                                        <div class="col">
+                                            <div class="row justify-content-between">
+                                                <div class="col-4">
+                                                    <p class="mb-1"><b>Subtotal</b></p>
+                                                </div>
+                                                <div class="flex-sm-col col-auto">
+                                                    <p class="mb-1"><b>₱'.$totprice.'</b></p>
+                                                </div>
+                                            </div>
+                                            
+                                            <hr class="my-0">
+                                        </div>
+                                    </div>';
+                                ?>
+                                    <!-- <div class="row mb-5 mt-4 ">
+                                        <div class="col-md-7 col-lg-6 mx-auto"><button type="button" class="btn btn-block btn-outline-primary btn-lg">ADD GIFT CODE</button></div>
+                                    </div> -->
+                                    <!-- <div class="row justify-content-between">
+                                        <div class="col-5">
+                                            <p class="mb-1"><b>Shipping</b></p>
+                                        </div>
+                                        <div class="flex-sm-col col-auto">
+                                            <p class="mb-1"><b>₱<span id="shp">0</span></b></p>
+                                        </div>
+                                    </div>
+                                    <div class="row justify-content-between">
+                                        <div class="col-4">
+                                            <p><b>Total</b></p>
+                                        </div>
+                                        <div class="flex-sm-col col-auto">
+                                            <p class="mb-1"><b>₱<span id="totp">'.$totprice.'</span></b></p>
+                                        </div>
+                                    </div> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+    <div id="modal" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog"
+        aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="mdtitle">Manage Address</h5>
+
+                    <span aria-hidden="true" data-dismiss="modal" style="cursor: pointer;" id="mdclose">&times;</span>
+
+                </div>
+
+                <div id="ld">
+                    <div class="modal-body" id="mdbody">
+                        <div class="alert alert-danger text-center" role="alert" id="alrt" hidden>
+                            Something went wrong!
+                        </div>
+                        <div id="lst">
+
+                        </div>
+
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">Street:</label>
+                            <input type="text" class="form-control" id="mstreet">
+                            <small id="emp1" style="color: red;" hidden>This field cannot be empty!</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="message-text" class="col-form-label">City:</label>
+                            <input type="text" class="form-control" id="mcity">
+                            <small id="emp2" style="color: red;" hidden>This field cannot be empty!</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="message-text" class="col-form-label">Province:</label>
+                            <input type="text" class="form-control" id="mprov">
+                            <small id="emp3" style="color: red;" hidden>This field cannot be empty!</small>
+                        </div>
+                        <div class="form-group" hidden>
+                            <label for="message-text" class="col-form-label">Email:</label>
+                            <input type="text" class="form-control" id="memail">
+                            <!-- <small id="emp4" style="color: red;" hidden>This field cannot be empty!</small> -->
+                        </div>
+                        <div class="form-group">
+                            <label for="message-text" class="col-form-label">Phone:</label>
+                            <input type="text" class="form-control" id="mphone">
+                            <small id="emp4" style="color: red;" hidden>This field cannot be empty!</small>
+                        </div>
+                        <input type="checkbox" class="me-2" id="chk"><label for="message-text"
+                            class="col-form-label">Save this address.</label>
+                    </div>
+                    <div class="modal-footer" id="mdfooter">
+                        <button type="button" class="btn btn-primary" id="btnsave" onclick="add_btn();">Add</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="mdno">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+
+        function add_btn() {
+
+            if (document.getElementById("chk").checked) {
+                addr_add();
+            } else {
+                add_wo_sav();
+            }
+
+        }
+        // var rad=0;
+        // function ship(x){
+        //     if(x==1){
+        //         rad=1;
+        //         document.getElementById("shpp").value=rad;
+        //     }else if(x==0){
+        //         rad=0;
+        //         document.getElementById("shpp").value=rad;
+        //     }
+        // }
+
+        var rad = 0;
+        var u = window.location.href;
+        var ur = new URL(u);
+        var p = ur.searchParams.get("items");
+
+        p = p.replace(/ /g, "+");
+        document.getElementById("form").setAttribute("action", "./?items=" + p + "&shp=" + rad);
+
+        function ship(x) {
+            // shp=Number(document.getElementById("shp").innerHTML);
+            // totp=Number(document.getElementById("totp").innerHTML);
+            // f=0;
+            if (x == 1) {
+                rad = 1;
+                // f=400;
+            } else if (x == 0) {
+                rad = 0;
+                // f=-400;
+            }
+            var u = window.location.href;
+            var ur = new URL(u);
+            var p = ur.searchParams.get("items");
+
+            p = p.replace(/ /g, "+");
+            document.getElementById("form").setAttribute("action", "./?items=" + p + "&shp=" + rad);
+            // document.getElementById("shp").innerHTML=shp+f;
+            // document.getElementById("totp").innerHTML=totp+f;
+        }
+        function clear_mod(x) {
+            document.getElementById("mstreet").setAttribute("style", "border-color:rgba(210,215,223,255);");
+            document.getElementById("mcity").setAttribute("style", "border-color:rgba(210,215,223,255);");
+            document.getElementById("mprov").setAttribute("style", "border-color:rgba(210,215,223,255);");
+            document.getElementById("memail").setAttribute("style", "border-color:rgba(210,215,223,255);");
+            document.getElementById("mphone").setAttribute("style", "border-color:rgba(210,215,223,255);");
+            document.getElementById("emp1").hidden = true;
+            document.getElementById("emp2").hidden = true;
+            document.getElementById("emp3").hidden = true;
+            document.getElementById("emp4").hidden = true;
+            // document.getElementById("emp5").hidden=true;
+            document.getElementById("alrt").hidden = true;
+            document.getElementById("btnsave").disabled = false;
+            document.getElementById("mdno").disabled = false;
+            document.getElementById("btnsave").innerHTML = 'Save';
+            document.getElementById("chk").checked = false;
+            if (x == 0) {
+                document.getElementById("mstreet").value = "";
+                document.getElementById("mcity").value = "";
+                document.getElementById("mprov").value = "";
+                document.getElementById("memail").value = "";
+                document.getElementById("mphone").value = "";
+            }
+        }
+
+        function addr_add() {
+            var s = document.getElementById("mstreet").value;
+            var c = document.getElementById("mcity").value;
+            var p = document.getElementById("mprov").value;
+            var e = document.getElementById("memail").value;
+            var ph = document.getElementById("mphone").value;
+
+            if (document.getElementById("mstreet").value == "" || document.getElementById("mcity").value == "" || document.getElementById("mprov").value == ""
+                || document.getElementById("mphone").value == ""
+            ) {
+                if (document.getElementById("mstreet").value == "") {
+                    document.getElementById("mstreet").setAttribute("style", "border-color:red;");
+                    document.getElementById("emp1").hidden = false;
+                }
+                if (document.getElementById("mcity").value == "") {
+                    document.getElementById("mcity").setAttribute("style", "border-color:red;");
+                    document.getElementById("emp2").hidden = false;
+                }
+                if (document.getElementById("mprov").value == "") {
+                    document.getElementById("mprov").setAttribute("style", "border-color:red;");
+                    document.getElementById("emp3").hidden = false;
+                }
+
+                if (document.getElementById("mphone").value == "") {
+                    document.getElementById("mphone").setAttribute("style", "border-color:red;");
+                    document.getElementById("emp4").hidden = false;
+                }
+            } else {
+
+
+                document.getElementById("btnsave").disabled = true;
+                document.getElementById("mdno").disabled = true;
+                document.getElementById("btnsave").innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>   Saving...';
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function () {
+
+                    if (this.readyState == 4 && this.status == 200) {
+                        console.log(this.responseText);
+                        const z = this.responseText;
+
+                        if (!isNaN(z)) {
+                            const y = String(z).split(".");
+                            add_wo_sav();
+                            $('#modal').modal('hide');
+                        } else {
+                            document.getElementById("alrt").hidden = false;
+                        }
+                        document.getElementById("mstreet").value = "";
+                        document.getElementById("mcity").value = "";
+                        document.getElementById("mprov").value = "";
+                        document.getElementById("memail").value = "";
+                        document.getElementById("mphone").value = "";
+
+                        document.getElementById("btnsave").disabled = false;
+                        document.getElementById("mdno").disabled = false;
+                        document.getElementById("btnsave").innerHTML = 'Save';
+                    };
+
+                }
+                var formdata = new FormData();
+
+                formdata.append("street", document.getElementById("mstreet").value);
+                formdata.append("city", document.getElementById("mcity").value);
+                formdata.append("prov", document.getElementById("mprov").value);
+                formdata.append("email", document.getElementById("memail").value);
+                formdata.append("phone", document.getElementById("mphone").value);
+                formdata.append("sel", 0);
+                xhttp.open("POST", "../php/call_functions.php?x=addr_add", true);
+                xhttp.send(formdata);
+            }
+
+        }
+
+        function sel_btn(id) {
+
+            document.getElementById("street").value = document.getElementById(id + "s").value;
+            document.getElementById("city").value = document.getElementById(id + "c").value;
+            document.getElementById("prov").value = document.getElementById(id + "p").value;
+            document.getElementById("email").value = document.getElementById(id + "e").value;
+            document.getElementById("num").value = document.getElementById(id + "ph").value;
+
+
+            document.getElementById("f_addr").innerHTML = document.getElementById(id + "s").value + ", " + document.getElementById(id + "c").value + ", " + document.getElementById(id + "p").value;
+            document.getElementById("f_addr2").innerHTML = document.getElementById(id + "e").value;
+            document.getElementById("f_addr3").innerHTML = document.getElementById(id + "ph").value;
+            $('#modal').modal('hide');
+        }
+
+        function add_wo_sav() {
+
+            document.getElementById("street").value = document.getElementById("mstreet").value;
+            document.getElementById("city").value = document.getElementById("mcity").value;
+            document.getElementById("prov").value = document.getElementById("mprov").value;
+            document.getElementById("email").value = document.getElementById("memail").value;
+            document.getElementById("num").value = document.getElementById("mphone").value;
+
+
+            document.getElementById("f_addr").innerHTML = document.getElementById("mstreet").value + ", " + document.getElementById("mcity").value + ", " + document.getElementById("mprov").value;
+            document.getElementById("f_addr2").innerHTML = document.getElementById("memail").value;
+            document.getElementById("f_addr3").innerHTML = document.getElementById("mphone").value;
+            $('#modal').modal('hide');
+        }
+
+        function ref_lst() {
+
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+
+                if (this.readyState == 4 && this.status == 200) {
+                    document.getElementById("lst").innerHTML = this.responseText;
+
+                };
+
+            }
+
+            xhttp.open("GET", "../php/call_functions.php?x=addr_list_chk", true);
+            xhttp.send();
+
+
+
+
+
+        }
+    </script>
+</body>
+
+</html>

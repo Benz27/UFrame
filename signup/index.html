@@ -1,0 +1,291 @@
+<?php
+session_start();
+
+include("../php/conn.php");
+include("../php/signup.php");
+include("../php/about.php");
+?>
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title><?php echo $abt_name;?> - Sign Up</title>
+        <!-- Favicon-->
+
+        <!-- Bootstrap icons-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="css/styles.css" rel="stylesheet" />
+
+    </head>
+    <body class="d-flex flex-column h-100"  style="background-color: blanchedalmond;">
+        <main class="flex-shrink-0">
+            <!-- Navigation-->
+            <!-- <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+                <div class="container px-5">
+                    <a class="navbar-brand" href="index.html">Start Bootstrap</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                            <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                            <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+                            <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+                            <li class="nav-item"><a class="nav-link" href="pricing.html">Pricing</a></li>
+                            <li class="nav-item"><a class="nav-link" href="faq.html">FAQ</a></li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" id="navbarDropdownBlog" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Blog</a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog">
+                                    <li><a class="dropdown-item" href="blog-home.html">Blog Home</a></li>
+                                    <li><a class="dropdown-item" href="blog-post.html">Blog Post</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" id="navbarDropdownPortfolio" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Portfolio</a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownPortfolio">
+                                    <li><a class="dropdown-item" href="portfolio-overview.html">Portfolio Overview</a></li>
+                                    <li><a class="dropdown-item" href="portfolio-item.html">Portfolio Item</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav> -->
+            <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+                <div class="container">
+                    <a class="nav-link" href="../" style="font-family: Myriad;font-weight: bolder;color: black;font-size: 30px;"><?php echo $abt_name;?></a>
+                  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                  </button>
+                
+              </div>
+              </nav>
+            <!-- Header-->
+            <header class="py-5" style="margin-bottom: 12%;">
+                <div class="mt-5">
+                    <main>
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-5">
+                                    <div class="card shadow-lg border-0 rounded-lg mt-5">
+                                        <div class="card-header"><h3 class="text-center font-weight-light my-4">Create Account</h3></div>
+                                        <div class="card-body">
+                                            <form id="form" method="post">
+                                                <div class="alert alert-danger" style="text-align:center" role="alert" id="alertp" hidden>
+     
+                                                  </div>
+                                                <div class="row mb-3">
+                                                    <div class="col-md-6">
+                                                        <div class="form-floating mb-3 mb-md-0">
+                                                            <input class="form-control" id="txtfname" type="text" name="fname" placeholder="Enter your first name" onclick="passclick()"required/>
+                                                            <label for="inputFirstName">First name</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-floating">
+                                                            <input class="form-control" id="txtlname" type="text" name="lname" placeholder="Enter your last name" onclick="passclick()"required/>
+                                                            <label for="inputLastName">Last name</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-floating mb-3">
+                                                    <input class="form-control" id="txtemail" type="email" name="email"  placeholder="name@example.com" onchange="getuser()" onclick="passclick()"required/>
+                                                    <label for="inputEmail">Email address</label>
+                                                </div>
+                                                <div class="row mb-3">
+                                                    <div class="col-md-6">
+                                                        <div class="form-floating mb-3 mb-md-0">
+                                                            <input class="form-control" id="txtpass" type="password" name="pass" placeholder="Create a password" onclick="passclick()" required/>
+                                                            <label for="inputPassword">Password</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-floating mb-3 mb-md-0">
+                                                            <input class="form-control" id="txtconpass" type="password" name="conpass" placeholder="Confirm password" onclick="passclick()" required/>
+                                                            <label for="inputPasswordConfirm">Confirm Password</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="mt-4 mb-0">
+                                                    <div class="d-grid"><button type="button" onclick="subm()" class="btn btn-primary btn-block">Create Account</button></div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="card-footer text-center py-3">
+                                            <div class="small"><a href="../login/">Have an account? Go to login</a></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- <div class="col-lg-5 d-none d-xl-block text-center"><img class="img-fluid rounded-3 my-5" src="../images/icon.png" alt="..." /></div> -->
+
+                            </div>
+                        </div>
+                    </main>
+
+                </div>
+            </header>
+            <!-- Features section-->
+            <!-- <section class="py-5" id="features">
+                <div class="container px-5 my-5">
+                    <div class="row gx-5">
+                        <div class="col-lg-4 mb-5 mb-lg-0"><h2 class="fw-bolder mb-0">Sign up to uframe.</h2></div>
+                        <div class="col-lg-8">
+                            <div class="row gx-5 row-cols-1 row-cols-md-2">
+                                <div class="col mb-5 h-100">
+                                    <h2 class="h5">title</h2>
+                                    <p class="mb-0">some text. some text.some text.some text.some text.some text.some text.</p>
+                                </div>
+                                <div class="col mb-5 h-100">
+                                    <h2 class="h5">title</h2>
+                                    <p class="mb-0">some text. some text.some text.some text.some text.some text.some text.</p>
+                                </div>
+                                <div class="col mb-5 mb-md-0 h-100">
+                                    <h2 class="h5">title</h2>
+                                    <p class="mb-0">some text. some text.some text.some text.some text.some text.some text.</p>
+                                </div>
+                                <div class="col h-100">
+                                    <h2 class="h5">title</h2>
+                                    <p class="mb-0">some text. some text.some text.some text.some text.some text.some text.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section> -->
+          
+        </main>
+        <!-- Footer-->
+        <footer class="bg-dark py-4 mt-auto">
+            <div class="container px-5">
+                <div class="row align-items-center justify-content-between flex-column flex-sm-row">
+                    <div class="col-auto"><div class="small m-0 text-white">Copyright &copy; <?php echo $abt_name;?> 2022</div></div>
+                    <div class="col-auto">
+                        <!-- <a class="link-light small" href="#!">Privacy</a>
+                        <span class="text-white mx-1">&middot;</span>
+                        <a class="link-light small" href="#!">Terms</a>
+                        <span class="text-white mx-1">&middot;</span> -->
+                        <a class="link-light small" href="#!">Contact</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <style type="text/css">
+            @import url('https://fonts.googleapis.com/css2?family=Birthstone&family=Poppins:ital,wght@0,400;0,500;0,600;1,600;1,800&display=swap');
+            </style>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="../js/jquery-3.6.0.js"></script>
+        <!-- <script src="scripts.js"></script> -->
+        <script>
+
+            var er="<?php $errmsg; ?>";
+        if(er!=""){
+            console.log(er);
+        }
+        var alrt=false;
+        var y=0;
+    var z;
+    var x;
+    var p1;
+    var p2;
+
+    var interc=false;   
+    var einterc=false;  
+
+function getuser(){   
+        var str=document.getElementById("txtemail").value;
+        var que="email";
+
+    var xmlhttp=new XMLHttpRequest();     
+    xmlhttp.onreadystatechange=function() {   
+    if (this.readyState==4 && this.status==200) { 
+    z=this.responseText;  
+    y=Number(z);   
+
+            if(y==1){
+                einterc=true;   
+            }else if(y==0){
+                einterc=false; 
+            }
+
+            
+            if (y==1){
+                x=document.getElementById("txtemail").value;
+                document.getElementById("txtemail").style.border="2px solid red";
+                document.getElementById("alertp").innerHTML="Email was already taken!";
+                document.getElementById("alertp").hidden=false;
+            }else{
+                x=document.getElementById("txtemail").value;
+                document.getElementById("txtemail").style.border="1px solid #ced4da";
+                document.getElementById("alertp").hidden=true;
+                document.getElementById("alertp").innerHTML="";
+            }
+
+
+    }
+  }
+  
+  xmlhttp.open("GET","../php/checkuser.php?q="+str+ "&qu=" + que,true);
+  xmlhttp.send();
+}
+
+
+function subm(){ 
+
+
+
+    p1=document.getElementById("txtpass").value;
+    p2=document.getElementById("txtconpass").value;
+    var result = p1.localeCompare(p2); 
+     
+    if(result!=0){
+            interc=true;
+            document.getElementById("txtpass").style.border="2px solid red";
+            document.getElementById("txtconpass").style.border="2px solid red";
+            document.getElementById("alertp").innerHTML="Password did not match!";
+            document.getElementById("alertp").hidden=false;
+            document.getElementById("txtpass").value="";
+            document.getElementById("txtconpass").value="";
+        
+    }else{
+        interc=false;
+        document.getElementById("txtpass").style.border="1px solid #ced4da";
+        document.getElementById("txtconpass").style.border="1px solid #ced4da";
+        document.getElementById("alertp").innerHTML="";
+        document.getElementById("alertp").hidden=true;
+        
+        if(!einterc){  
+
+                document.getElementById("form").submit();
+
+        }else{
+                document.getElementById("txtemail").style.border="2px solid red";
+                document.getElementById("alertp").innerHTML="Email was already taken!";
+                document.getElementById("alertp").hidden=false;
+        }
+    }
+
+    
+  
+
+    
+}
+
+function passclick(){
+    if(!einterc){
+        document.getElementById("txtpass").style.border="1px solid #ced4da";
+        document.getElementById("txtconpass").style.border="1px solid #ced4da";
+        document.getElementById("alertp").innerHTML="";
+        document.getElementById("alertp").hidden=true;
+    }else{
+        document.getElementById("alertp").innerHTML="Email was already taken!";
+        document.getElementById("txtpass").style.border="1px solid #ced4da";
+        document.getElementById("txtconpass").style.border="1px solid #ced4da";
+    }
+}
+
+        </script>
+    </body>
+</html>

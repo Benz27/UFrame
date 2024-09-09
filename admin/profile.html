@@ -1,0 +1,568 @@
+<?php
+session_start();
+
+include("php/aconn.php");
+include("php/read.php");
+include("php/profile.php");
+
+$user_data=check_login($alink);
+
+
+
+
+?>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>RBF Admin</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+
+</head>
+
+<body id="page-top">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+            <!-- Sidebar - Brand -->
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+                <!-- <div class="sidebar-brand-icon rotate-n-15">
+                    <i class="fas fa-laugh-wink"></i>
+                </div> -->
+                <div class="sidebar-brand-text mx-3">RBF Admin</div>
+            </a>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider my-0">
+
+            <!-- Nav Item - Dashboard -->
+            <li class="nav-item">
+                <a class="nav-link" href="index.html">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Dashboard</span></a>
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                Interface
+            </div>
+
+            <li class="nav-item active">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true"
+                    aria-controls="collapseTwo">
+                    <i class="fas fa-fw fa-user"></i>
+                    <span>Account</span>
+                </a>
+                <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo"
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <!-- <h6 class="collapse-header">Custom Components:</h6> -->
+                        <a class="collapse-item active" href="profile.html">Profile</a>
+                        <a class="collapse-item" style="cursor: pointer;" data-toggle="modal" data-target="#logoutModal">Log-Out</a>
+                    </div>
+                </div>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="sitedetails.html"
+                    aria-expanded="true" aria-controls="collapsesitedet">
+                    <i class="fas fa-fw fa-store"></i>
+
+                    <span>Shop Details</span>
+                </a>
+ 
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="order_list.html"
+                    aria-expanded="true" aria-controls="collapseOrders">
+                    <i class="fas fa-fw fa-list-alt"></i>
+
+                    <span>Orders</span>
+                </a>
+ 
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseInventory"
+                    aria-expanded="true" aria-controls="collapseInventory">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Products</span>
+                </a>
+                <div id="collapseInventory" class="collapse" aria-labelledby="headingInventory"
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <!-- <a class="collapse-item" href="productlist.html">Product list</a> -->
+                            <a class="collapse-item dropdown-toggle" role="button" id="addproduct" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Add Product
+                            </a>
+                            <!-- Dropdown - User Information -->
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                aria-labelledby="addproduct">
+                                <a class="dropdown-item" href="addproduct.html">
+                                    Single product
+                                </a>
+                                <a class="dropdown-item" href="addproduct_v.html">
+                                    Product with variants
+                                </a>
+                            </div>
+
+                        <a class="collapse-item" href="stocks.html">Products</a>
+                        <a class="collapse-item" href="categories.html">Categories</a>
+                    </div>
+                </div>
+            </li>
+
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAnalytics" aria-expanded="true"
+                    aria-controls="collapseAnalytics">
+                    <i class="fas fa-fw fa-chart-line"></i>
+                    <span>Reports</span>
+                </a>
+                <div id="collapseAnalytics" class="collapse" aria-labelledby="headingAnalytics"
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <!-- <h6 class="collapse-header">Custom Components:</h6> -->
+                        <a class="collapse-item" href="orders_sales.html">Order Sales</a>
+                        <a class="collapse-item" href="sales.html">Sales by Date</a>
+                        <a class="collapse-item" href="product_sales.html">Product Sales</a>
+                        <a class="collapse-item" href="category_sales.html">Product Category Sales</a>
+                        <a class="collapse-item" href="shipment.html">Shipments</a>
+                    </div>
+                </div>
+            </li>
+
+
+
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="customers.html"
+                    aria-expanded="true" aria-controls="collapseCustomer">
+                    <i class="fas fa-fw fa-user"></i>
+
+                    <span>Customers</span>
+                </a>
+ 
+            </li>
+
+
+            <li class="nav-item">
+                <a class="nav-link" href="transportapps.html" 
+                    aria-expanded="true" aria-controls="collapseTransport">
+                    <i class="fas fa-fw fa-truck"></i>
+
+                    <span>Delivery Apps</span>
+                </a>
+
+            </li>
+
+            <?php
+            if($priv==10){
+                echo'<li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAcc"
+                        aria-expanded="true" aria-controls="collapseAcc">
+                        <i class="fas fa-fw fa-users"></i>
+                        <span>Manage Accounts</span>
+                    </a>
+                    <div id="collapseAcc" class="collapse" aria-labelledby="headingAcc"
+                        data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <a class="collapse-item" href="acclist.html">Admin accounts</a>
+                            <a class="collapse-item" href="create.html">Add account</a>
+                            <!-- <a class="collapse-item" href="utilities-other.html">Pickups</a> -->
+                        </div>
+                    </div>
+                </li>';
+            }
+
+            ?>
+
+         
+            <hr class="sidebar-divider">
+
+<!-- 
+            <div class="sidebar-heading">
+                Addons
+            </div> -->
+
+  
+            <!-- <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
+                    aria-expanded="true" aria-controls="collapsePages">
+                    <i class="fas fa-fw fa-folder"></i>
+                    <span>Pages</span>
+                </a>
+                <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Login Screens:</h6>
+                        <a class="collapse-item" href="login.html">Login</a>
+                        <a class="collapse-item" href="register.html">Register</a>
+                        <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
+                        <div class="collapse-divider"></div>
+                        <h6 class="collapse-header">Other Pages:</h6>
+                        <a class="collapse-item" href="404.html">404 Page</a>
+                        <a class="collapse-item" href="blank.html">Blank Page</a>
+                    </div>
+                </div>
+            </li>
+
+     
+            <li class="nav-item">
+                <a class="nav-link" href="charts.html">
+                    <i class="fas fa-fw fa-chart-area"></i>
+                    <span>Charts</span></a>
+            </li>
+
+    
+             -->
+            <!-- <li class="nav-item">
+                <a class="nav-link" href="orders.html">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Orders</span></a>
+            </li> -->
+
+            <!-- <hr class="sidebar-divider d-none d-md-block"> -->
+            <!-- Sidebar Toggler (Sidebar) -->
+            <div class="text-center d-none d-md-inline">
+                <button class="rounded-circle border-0" id="sidebarToggle"></button>
+            </div>
+
+        </ul>
+        <!-- End of Sidebar -->
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Topbar -->
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+                    <!-- Sidebar Toggle (Topbar) -->
+                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                        <i class="fa fa-bars"></i>
+                    </button>
+
+                    <!-- Topbar Search -->
+                    <!-- <form
+                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                        <div class="input-group">
+                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
+                                aria-label="Search" aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="button">
+                                    <i class="fas fa-search fa-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form> -->
+
+                    <!-- Topbar Navbar -->
+                    <ul class="navbar-nav ml-auto">
+
+                        <!-- Nav Item - Search Dropdown (Visible Only XS) -->
+   
+                        <!-- <li class="nav-item dropdown no-arrow d-sm-none">
+                            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-search fa-fw"></i>
+                            </a>
+         
+                            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
+                                aria-labelledby="searchDropdown">
+                                <form class="form-inline mr-auto w-100 navbar-search">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control bg-light border-0 small"
+                                            placeholder="Search for..." aria-label="Search"
+                                            aria-describedby="basic-addon2">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-primary" type="button">
+                                                <i class="fas fa-search fa-sm"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </li> -->
+               
+
+                        <div class="topbar-divider d-none d-sm-block"></div>
+
+                        <!-- Nav Item - User Information -->
+                        <li class="nav-item dropdown no-arrow">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo $nav_fname;?> <?php echo $nav_lname;?></span>
+                                <i class="fas fa-fw fa-user"></i>
+                            </a>
+                            <!-- Dropdown - User Information -->
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                aria-labelledby="userDropdown">
+                                <a class="dropdown-item" href="profile.html">
+                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Profile
+                                </a>
+                                <a class="dropdown-item" href="security.html">
+                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Security
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a style="cursor: pointer;" class="dropdown-item" data-toggle="modal" data-target="#logoutModal">
+                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Logout
+                                </a>
+                            </div>
+                        </li>
+
+                    </ul>
+
+                </nav>
+                <!-- End of Topbar -->
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <div class="container-xl px-4 mt-4">
+                        <!-- Account page navigation-->
+                        <nav class="nav nav-borders">
+                            <a class="nav-link text-primary" href="profile.html">Profile</a>
+                            <a class="nav-link text-secondary" href="security.html">Security</a>
+
+
+                        </nav>
+                        <hr class="mt-0 mb-4" />
+                        <div class="row">
+                            <div class="col-xl-4">
+                                <!-- Profile picture card-->
+                                <!-- <div class="card mb-4 mb-xl-0">
+                                    <div class="card-header">Profile Picture</div>
+                                    <div class="card-body text-center"> -->
+                                        <!-- Profile picture image-->
+                                        <!-- <img class="img-account-profile rounded-circle mb-2" src="<?php echo $about_pic;?>" alt="" height="200px" id="my_img" width="200px"/> -->
+                                       
+                                        <!-- Profile picture help block-->
+                                        <!-- <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div> -->
+                                        <!-- Profile picture upload button-->
+                                        <!-- <button class="btn btn-primary" onclick="ifile.click();" type="button">Upload new image</button>
+                                    </div>
+                                </div> -->
+                            </div>
+                            <div class="col-xl-12">
+                                <!-- Account details card-->
+                                <div class="card mb-4">
+                                    <div class="card-header">Account Details</div>
+                                    <div class="card-body">
+                                        <form method="post">
+                                            
+                                            <?php
+                                            if($upd==1){
+echo' <div class="alert alert-success text-center" role="alert" id="alrt" onclick="alrt();">
+    Updated successfully!
+  </div>';
+                                            }
+                                           
+
+
+                                            echo '
+                                            <input type="text" name="pic" id="pic" value="" hidden> 
+                                            <input type="file" id="ifile" name="fileUpload" hidden>
+                                            <div class="mb-3">
+                                                <label class="small mb-1" for="inputUsername">Username</label>
+                                                <input class="form-control" id="inputUsername" type="text" placeholder="Enter your username" value="'.$about_uname.'" name="uname"/>
+                                            </div>
+                                            <!-- Form Row-->
+                                            <div class="row gx-3 mb-3">
+                                   
+                                                <div class="col-md-6">
+                                                    <label class="small mb-1" for="fname">First name</label>
+                                                    <input class="form-control" id="fname" type="text" placeholder="Enter your first name" value="'.$about_fname.'" name="fname"/>
+                                                </div>
+                                    
+                                                <div class="col-md-6">
+                                                    <label class="small mb-1" for="lname">Last name</label>
+                                                    <input class="form-control" id="lname" type="text" placeholder="Enter your last name" value="'.$about_lname.'" name="lname"/>
+                                                </div>
+                                            </div>
+                            
+                                            <div class="row gx-3 mb-3">
+                              
+                                                <div class="col-md-6">
+                                                    <label class="small mb-1" for="street">Street/Block No.</label>
+                                                    <input class="form-control" id="street" type="text" placeholder="Enter your street" value="'.$ab_street.'" name="street"/>
+                                                </div>
+                                                <!-- Form Group (location)-->
+                                            </div>
+                                            <div class="row gx-3 mb-3">
+                                                <!-- Form Group (organization name)-->
+                                                <div class="col-md-6">
+                                                    <label class="small mb-1" for="city">City</label>
+                                                    <input class="form-control" id="city" type="text" placeholder="Enter your city" value="'.$ab_city.'" name="city" />
+                                                </div>
+                                                <!-- Form Group (location)-->
+                                                <div class="col-md-6">
+                                                    <label class="small mb-1" for="prov">Province</label>
+                                                    <input class="form-control" id="prov" type="text" placeholder="Enter your province" value="'.$ab_prov.'" name="prov"/>
+                                                </div>
+                                            </div>
+                                            <!-- Form Group (email address)-->
+                                            <div class="mb-3">
+                                                <label class="small mb-1" for="Country">Country</label>
+                                                <input class="form-control" id="country" type="text" placeholder="Enter your email address" value="'.$about_country.'" name="country"/>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="small mb-1" for="inputEmailAddress">Email address</label>
+                                                <input class="form-control" id="inputEmailAddress" type="email" placeholder="Enter your email address" value="'.$about_email.'" name="email"/>
+                                            </div>
+                                            <!-- Form Row-->
+                                            <div class="row gx-3 mb-3">
+                                                <!-- Form Group (phone number)-->
+                                                <div class="col-md-6">
+                                                    <label class="small mb-1" for="inputPhone">Phone number</label>
+                                                    <input class="form-control" id="inputPhone" type="tel" placeholder="Enter your phone number" value="'.$about_contno.'" name="contno"/>
+                                                </div>
+                                                <!-- Form Group (birthday)-->
+                                                <div class="col-md-6">
+                                                    <label class="small mb-1" for="inputBirthday">Birthday</label>
+                                                    <input class="form-control" id="inputBirthday" type="date" placeholder="Enter your birthday" value="'.$ab_dte.'" name="dte"/>
+                                                </div>
+                                            </div>';
+                                            ?>
+                                            <!-- Save changes button-->
+                                            <button class="btn btn-primary" type="submit">Save changes</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Body -->
+
+                </div>
+                <!-- /.container-fluid -->
+
+            </div>
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; RBF Admin 2022</span>
+                    </div>
+                </div>
+            </footer>
+            <!-- End of Footer -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">x</span>
+                    </button>
+                </div>
+                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-primary" href="./php/logout.php">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript -->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="js/sb-admin-2.min.js"></script>
+<script>
+        var imgbase64="";
+        var fnm="";
+
+        const ifile=document.getElementById("ifile");
+        const img=document.querySelector('#my_img');
+        const inp=document.querySelector('#pic');
+
+function alrt(){
+        document.getElementById("alrt").remove();
+}
+
+
+
+ifile.addEventListener('change', function(event){
+
+const uploadedFile = document.querySelector('#ifile').files[0];
+    toBase64(uploadedFile)
+    .then(res => {
+   imgbase64=res;
+   inp.value=imgbase64;
+    })
+    .catch(err => {
+  imgbase64=err;
+  console.log(err);
+    })
+
+});
+
+const toBase64 = file => new Promise((resolve, reject) => {
+const reader = new FileReader();
+reader.addEventListener('load', function(){
+    
+    img.setAttribute('src',reader.result);
+    fnm=ifile.value.match(/[\/\\]([\w\d\s\.\-\(\)]+)$/)[1];
+ 
+  });
+
+reader.readAsDataURL(file);
+reader.onload = () => resolve(reader.result);
+reader.onerror = error => reject(error);
+});
+
+</script>
+</body>
+
+</html>

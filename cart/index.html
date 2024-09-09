@@ -1,0 +1,424 @@
+<?php
+session_start();
+
+include("../php/conn.php");
+include("../php/read.php");
+include("../php/cart.php");
+$user_data=check_login($link);
+
+include("../php/about.php");
+
+function count_to_ship($link){
+$sql="SELECT count(t_id) as 't_id' FROM transac where user_id=$_SESSION[user_id] and r_id > 0 and d_id = 0 and d_stat = 0 and status >= 0";
+$result = mysqli_query($link, $sql);
+if ($result && mysqli_num_rows($result) > 0) {
+  $row = mysqli_fetch_array($result);
+  return $row['t_id'];
+
+}
+
+}
+function count_to_receive($link){
+  $sql="SELECT count(t_id) as 't_id' FROM transac where user_id=$_SESSION[user_id] and r_id > 0 and d_id > 0 and d_stat = 0 and status >= 0";
+  $result = mysqli_query($link, $sql);
+  if ($result && mysqli_num_rows($result) > 0) {
+    $row = mysqli_fetch_array($result);
+    return $row['t_id'];
+  
+  }
+  
+  }
+
+
+
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?php echo $abt_name;?> - Cart</title>
+    <link href="bootsrap.min.css" rel="stylesheet" />
+    <link href="bootsrap.bundle.min.css" rel="stylesheet" />
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container px-4 px-lg-5">
+      <a class="nav-link" href="../" style="font-family: Myriad;font-weight: bolder;color: black;font-size: 30px;"><?php echo $abt_name;?></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                <!-- <li class="nav-item"><a class="nav-link" aria-current="page" href="../login/">Log in</a></li> -->
+                <li class="nav-item"><a class="nav-link" href="../aboutus/">About</a></li>
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" id="navbarDropdown" style="cursor: pointer;" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
+                  <ul class="dropdown-menu" aria-labelledby="navbarDropdown" id="category">
+                    <li><a class="dropdown-item" href="../">All Products</a></li>
+                    <li><hr class="dropdown-divider" /></li>
+                </ul>
+              </li>
+                <li class="nav-item">
+                  <?php
+                  if($s_id){
+                      echo '<a class="nav-link" id="shp" role="button" aria-current="page" href="../profile/">Profile</a>';
+                  }else{
+                      echo '<a class="nav-link" id="shp" role="button" aria-current="page" href="../login/">Log-In</a>';
+                  }
+                  ?>
+              </li>
+              <li class="nav-item" style="margin-left: 30px;"><a class="nav-link" href="../profile/orders/?o=3">To Ship Items(<?php echo count_to_ship($link);?>)</a></li>
+              <li class="nav-item"><a class="nav-link" href="../profile/orders/?o=4">To Receive Items(<?php echo count_to_receive($link);?>)</a></li>
+            </ul>
+      
+
+
+
+
+        </div>
+    </div>
+</nav>
+
+  <div class="px-4 px-lg-0" id="main">
+    <?php 
+
+    if(count($s_cart)<1){
+      echo '<div id="empt">
+      <div class="container py-5 text-center">
+        <h1 class="display-5">Shopping Cart</h1>
+        <p class="lead mb-0">(your items will apear here)</p>
+      </div>
+  
+      <div class="row py-5 p-4 bg-white rounded shadow-sm">
+           
+        <div class="col-lg-12">
+          <div class="bg-light rounded-pill px-4 py-3 text-uppercase font-weight-bold text-center"><a href="../">Go to shop.</a></div>
+          <!-- <div class="p-4">
+            <ul class="list-unstyled mb-4">
+             
+              <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Total: </strong>
+                <h5 class="font-weight-bold">$400.00</h5>
+                <a href="#" class="btn btn-dark rounded-pill py-2 btn-block col-lg-3">Procceed to checkout</a>
+  
+              </li>
+              <li></li>
+            </ul>
+          </div> -->
+        </div>
+      </div>
+        <!-- End -->
+      </div>
+      ';
+      
+    }else{
+
+   
+   
+
+  
+  
+    echo '<div id="crt"><div class="pb-5">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12 p-5 bg-white rounded shadow-sm mb-5">
+  
+            <!-- Shopping cart table -->
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col" class="border-0 bg-light">
+                      <div class="p-2 px-3 text-uppercase">Product</div>
+                    </th>
+                    <th scope="col" class="border-0 bg-light">
+                      <div class="py-2 text-uppercase">Unit Price</div>
+                    </th>
+                    <th scope="col" class="border-0 bg-light">
+                      <div class="py-2 text-uppercase">Price</div>
+                    </th>
+                    <th scope="col" class="border-0 bg-light">
+                      <div class="py-2 text-uppercase">Quantity</div>
+                    </th>
+                    <th scope="col" class="border-0 bg-light">
+                      <div class="py-2 text-uppercase">Remove</div>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>';
+
+                 
+
+                    for($z=0;$z<count($s_cart);$z++){
+                      $idd=$s_cart;
+                      $sql = "SELECT * FROM inventory where item_id=$idd[$z]";  
+            
+
+                      if($result = mysqli_query($link, $sql)){
+                        if(mysqli_num_rows($result) > 0){ 
+
+                          $row=mysqli_fetch_assoc($result); 
+                            $k;
+                            $a=false;
+                            $stock=$row['quantity'];
+                            $inh="Add to cart";
+                            
+                            $id=$row['item_id'];
+                            foreach (array_keys($s_cart, $row['item_id']) as $key) {
+                                $k=$key;
+                            }
+
+                            $pqnt=$s_qnt[$k];
+
+                            $price=$row['selling_price']*$pqnt;
+
+                            $v_id=$row['v_id'];
+                            $name=$row['name'];
+                            $src='../images/products/'.$row['item_id'];
+                            if($v_id>0){
+                              $src='../images/vproducts/'.$row['v_id'];
+                              $name=$row['name'].'<span class="text-secondary"> - '.$row['v_name'].'</span>';
+                            }
+
+
+
+                            $med=explode("|",$row['media']);
+                            $catg=$row['category']; 
+
+                      echo '<tr id="'.$id.'tr">
+                              <th scope="row">
+                                <div class="p-2">
+                                  <input type="checkbox" class="align-middle" id="'.$id.'" onclick="chck('.$id.')">
+                                  <img src="'.$src.'/'.$med[0] .'" alt="" width="70" class="img-fluid rounded shadow-sm">
+                                  <div class="ml-3 d-inline-block align-middle">
+                                    <h5 class="mb-0"><a href="../item/?item='.$id.'" class="text-dark d-inline-block align-middle">'.$name.'</a></h5><span class="text-muted font-weight-normal font-italic d-block">Category: '.$catg.'</span>
+                                  </div>
+                                </div>
+                              </th>
+                              <td class="border-0 align-middle"><strong>₱<span>'.$row['selling_price'].'</span></strong></td>
+                              <td class="border-0 align-middle"><strong>₱<span id="'.$id.'pr"  name="'.$row['selling_price'].'">'.$price.'</span></strong></td>
+                              <td class="align-middle">
+                                <button class="btn btn-dark mt-auto" id="'.$id.'min" onclick="quan(-1,'.$id.','.$stock.',0)" value="0">-</button>
+                                <input id="'.$id.'inp" style="width: 8%;margin: 1%;text-align: center;" type="text" value="'.$s_qnt[$k].'" onkeypress="return numonly(event);" onkeyup="qnl(this.value,'.$id.','.$stock.');" onchange="addto('.$id.',3,'.$stock.',this.value);"></input>
+                                <button class="btn btn-dark mt-auto" id="'.$id.'max" onclick="quan(1,'.$id.','.$stock.',0)" value="0">+</button>
+                                <input id="'.$id.'stk"style="width: 15%;margin-left: 2%;text-align: center;" type="text" value="'.$stock.'" disabled hidden/>
+                              </td>
+                              <td class="border-0 align-middle"><i class="fa fa-trash" style="cursor: pointer;" onclick="rem('.$id.',0);tprice('.$id.',0)"></i></td>
+                            </tr>';
+
+                        }
+                      }else{
+                        echo "ERROR: Could not able to execute $sql. " . mysqli_error($link);
+                      }
+                          
+
+
+                        
+                        
+                     
+                    
+                    }
+
+
+               echo '</tbody>
+              </table>
+            </div>
+            <!-- End -->
+          </div>
+        </div>
+        <div class="row py-5 p-4 bg-white rounded shadow-sm">
+         
+          <div class="col-lg-12">
+            <div class="bg-light rounded-pill px-4 py-3 text-uppercase font-weight-bold">Order summary </div>
+            <div class="p-4">
+              <ul class="list-unstyled mb-4">
+               
+                <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Total: </strong>
+                  <h5 class="font-weight-bold">₱<span id="tprice">0</span></h5>
+                  <!-- <a href="#" class="btn btn-dark rounded-pill py-2 btn-block col-lg-3">Procceed to checkout</a> -->
+
+                </li>
+                <li><div class="buttons d-flex justify-content-center"><a id="chcka" style="text-decoration: none;" href=""><button id="chck" class="btn btn-dark btn-block" disabled>Procceed to checkout</button></a> </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+  
+      </div>
+    </div></div>';
+
+  }
+    ?>
+  </div>
+  <style type="text/css">
+    @import url('https://fonts.googleapis.com/css2?family=Birthstone&family=Poppins:ital,wght@0,400;0,500;0,600;1,600;1,800&display=swap');
+    </style>
+  <script src="../js/jquery-3.3.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    
+  const arrurl=[];
+var arcount=0;
+const price =[];
+
+get_categories();
+
+function get_categories(){
+    var xhttp = new XMLHttpRequest();
+           xhttp.onreadystatechange = function() {
+           if(this.readyState == 4 && this.status == 200){
+            const arr= this.responseText.split(",");
+
+            const element = document.getElementById("category");
+               for(x=0;x<arr.length;x++){
+                const li = document.createElement("li");
+                const a = document.createElement("a");
+                const atxt = document.createTextNode(arr[x]);
+                a.setAttribute("class","dropdown-item");
+                a.appendChild(atxt);
+                a.href="./?s="+arr[x];
+                li.appendChild(a);
+                element.appendChild(li);
+               }
+
+
+        };
+           }
+
+
+
+           xhttp.open("GET", "../php/call_functions.php?x=get_categories", true);
+           xhttp.send();
+    
+}
+
+
+function qnl(x,y,z){
+    if(!isNaN(x) && x!=""){
+        if(x>Number(z)){
+        document.getElementById(y+"inp").value=z;
+        }
+    }
+}
+
+
+function numonly(e) {
+    e = (e) ? e : window.event;
+    var chr = (e.which) ? e.which : e.keyCode;
+    if (chr > 31 && (chr < 48 || chr > 57)) {
+     return false;
+    }else{
+      return true;
+    }
+}
+
+function tprice(x,y){
+  var p=0;
+  if (y==1) {
+        price.push(x);
+  } else if (y==0){
+        const index = price.indexOf(x);
+        if(index>-1){
+          price.splice(index, 1);
+        }
+  }
+  for(z=0;z<price.length;z++){
+      p+=(Number(document.getElementById(price[z]+"pr").getAttribute("name"))*Number(document.getElementById(price[z]+"inp").value));
+  }
+  document.getElementById("tprice").innerHTML=p;
+}
+
+
+
+function rem(x,y){
+  const arrrem=[x];
+  if(y>0){
+    arrrem=arrurl;
+  }
+    for(let g=0,j=0;g < arrrem.length;g++){
+                    addto(arrrem[j],2,0,0);
+                    if(document.getElementById(arrrem[j]+"tr")){
+                      document.getElementById(arrrem[j]+"tr").remove();
+                      const index = arrrem.indexOf(arrrem[j]);
+                      arrrem.splice(index, 1);
+                    }             
+    }
+}
+
+function chck(a){
+  var checkbox = document.getElementById(a);
+  if (checkbox.checked) {
+        arrurl.push(a);
+        tprice(a,1);
+  } else {
+        const index = arrurl.indexOf(a);
+        arrurl.splice(index, 1);
+        tprice(a,0);
+  }
+  arcount = arrurl.length;
+  if (arcount > 0){
+    document.getElementById("chck").disabled=false;
+  }else{
+    document.getElementById("chck").disabled=true;
+  }
+  uval = arrurl.filter(Boolean).join("+")
+  document.getElementById("chcka").href = "../checkout/?items="+uval;
+}
+
+function addto(x,z,st,q) {
+        var btn = document.getElementById(x);
+
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+           
+          if (this.readyState == 4 && this.status == 200) {
+            
+            var str=this.responseText;
+            console.log(str);
+            const ar= str.split(",");
+            var y = ar[0];
+            
+            if (y==1||y==4||y==5){
+              document.getElementById(x+"pr").innerHTML= Number(document.getElementById(x+"pr").getAttribute("name"))*Number(ar[2]);
+              document.getElementById(x+"inp").value = ar[2];
+              tprice(x,2);
+            }else if(y==3){
+              if(ar[1]==0){
+                document.getElementById("main").innerHTML='<div id="empt"><div class="container py-5 text-center"><h1 class="display-5">Shopping Cart</h1><p class="lead mb-0">(your items will apear here)</p></div><div class="row py-5 p-4 bg-white rounded shadow-sm"><div class="col-lg-12"><div class="bg-light rounded-pill px-4 py-3 text-uppercase font-weight-bold text-center"><a href="../">Go to shop.</a></div></div></div></div>';
+
+              }
+            }
+            
+          }
+        };
+        xhttp.open("GET", "../php/fncart.php?id="+x+"&x="+z+"&st="+st+"&q="+q, true);
+        xhttp.send();
+      }
+
+
+function quan(x,z,q,o){
+
+var y=Number(document.getElementById(z+"inp").value);
+
+
+  if(y>1||x==1){
+    if(y<q||x==-1){
+    y+=Number(x);
+    if(y>q){
+
+     }else{
+        addto(z,o,q,x);
+        
+
+     }
+  }
+}
+
+
+
+}
+  </script>
+</body>
+</html>
+
